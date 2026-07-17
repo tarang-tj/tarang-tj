@@ -9,7 +9,8 @@ I build applied-AI systems: retrieval pipelines, evaluation harnesses, and produ
 - **[ragproof](https://github.com/tarang-tj/ragproof)**: open-source RAG evaluation harness. Retrieval metrics (hit@k, MRR, NDCG, recall), answer faithfulness scoring, hybrid-retrieval benchmarks, and drift detection. Benchmarked on BEIR scifact (5,000+ docs, 300 real queries). Dense retrieval with bge-small reaches NDCG@10 0.720. Adding hybrid retrieval beats a BM25 baseline, 0.56 to 0.61. 54 tests, Docker, GitHub Actions CI.
 - **[SyllabusAI](https://syllabusai.net)**: shipped product that turns a course syllabus into a calendar you import in one step. 500+ active users. Claude API, Node.js, Supabase.
 - **[AutoAppli](https://autoappli.com)**: AI job-application platform with resume tailoring and application tracking. Next.js, TypeScript, FastAPI, Supabase, Claude API.
-- **[Portfolio](https://tarang-tj.github.io)**: a 3D ramen shop coded from scratch in Three.js and vanilla JS. No framework, no template.
+- **[Portfolio](https://tarang-tj.github.io)**: an interactive 3D portfolio site, hand-coded in Three.js and vanilla JS. No framework, no template.
+- **[3D ramen shop](https://tarang-tj.github.io/3d-ramenshop-portfolio/)**: a walk-through 3D scene built the same way, Three.js r128 and vanilla JS.
 
 Also on this profile: data-analytics work like [economic-pulse-dashboard](https://github.com/tarang-tj/economic-pulse-dashboard) and [ecommerce-sql](https://github.com/tarang-tj/ecommerce-sql). Same engineering habit, different tools.
 
