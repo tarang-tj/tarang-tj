@@ -1,8 +1,8 @@
 ## Tarang "TJ" Jammalamadaka
 
-I build applied-AI systems: retrieval pipelines, evaluation harnesses, and products people use. MIS junior at UW Bothell, targeting applied-AI and forward-deployed engineering roles, full-time June 2027.
+I build applied-AI systems: retrieval pipelines, evaluation harnesses, and products people use.
 
-**Now:** Global Human Insights Intern at The Coca-Cola Company (Ignite Program, Atlanta), working on AI and martech.
+**Now:** Global Human Insights Intern at The Coca-Cola Company (Ignite Program, Atlanta), working across consumer analytics, martech, and applied AI. MIS junior at UW Bothell, graduating 2027.
 
 ### What I'm building
 
@@ -12,6 +12,12 @@ I build applied-AI systems: retrieval pipelines, evaluation harnesses, and produ
 - **[Portfolio](https://tarang-tj.github.io)**: a 3D ramen shop coded from scratch in Three.js and vanilla JS. No framework, no template.
 
 Also on this profile: data-analytics work like [economic-pulse-dashboard](https://github.com/tarang-tj/economic-pulse-dashboard) and [ecommerce-sql](https://github.com/tarang-tj/ecommerce-sql). Same engineering habit, different tools.
+
+### Focus
+
+RAG evaluation, retrieval, and agentic workflows with the Claude API. Python and TypeScript.
+
+Looking for applied AI and forward-deployed engineering roles starting June 2027.
 
 ### Contact
 
