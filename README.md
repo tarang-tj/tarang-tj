@@ -1,25 +1,11 @@
-## Tarang "TJ" Jammalamadaka
+hi, i'm tj.
 
-I build applied-AI systems: retrieval pipelines, evaluation harnesses, and products people use.
+building [ragproof](https://github.com/tarang-tj/ragproof), an open source RAG evaluation harness. retrieval metrics, answer faithfulness, and drift detection, benchmarked on BEIR.
 
-**Now:** Global Human Insights Intern at The Coca-Cola Company (Ignite Program, Atlanta), working across consumer analytics, martech, and applied AI. MIS junior at UW Bothell, graduating 2027.
+applied AI and martech at The Coca-Cola Company, Ignite Program, Atlanta. MIS at UW Bothell, class of 2027.
 
-### What I'm building
+also shipped [SyllabusAI](https://syllabusai.net) (turns a course syllabus into a calendar in one step, 500+ users), [claude-skill-audit](https://github.com/tarang-tj/claude-skill-audit) (audit an entire Claude Code setup in one command), and [the-breaker](https://github.com/tarang-tj/the-breaker) (a physical dead man switch for an autonomous agent fleet).
 
-- **[ragproof](https://github.com/tarang-tj/ragproof)**: open-source RAG evaluation harness. Retrieval metrics (hit@k, MRR, NDCG, recall), answer faithfulness scoring, hybrid-retrieval benchmarks, and drift detection. Benchmarked on BEIR scifact (5,000+ docs, 300 real queries). Dense retrieval with bge-small reaches NDCG@10 0.720. Adding hybrid retrieval beats a BM25 baseline, 0.56 to 0.61. 54 tests, Docker, GitHub Actions CI.
-- **[SyllabusAI](https://syllabusai.net)**: shipped product that turns a course syllabus into a calendar you import in one step. 500+ active users. Claude API, Node.js, Supabase.
-- **[AutoAppli](https://autoappli.com)**: AI job-application platform with resume tailoring and application tracking. Next.js, TypeScript, FastAPI, Supabase, Claude API.
-- **[Portfolio](https://tarang-tj.github.io)**: an interactive 3D portfolio site, hand-coded in Three.js and vanilla JS. No framework, no template.
-- **[3D ramen shop](https://tarang-tj.github.io/3d-ramenshop-portfolio/)**: a walk-through 3D scene built the same way, Three.js r128 and vanilla JS.
+if you want to learn more, check out my [portfolio](https://tarang-tj.github.io), my [LinkedIn](https://www.linkedin.com/in/tarang-tj/), or the repos pinned below.
 
-Also on this profile: data-analytics work like [economic-pulse-dashboard](https://github.com/tarang-tj/economic-pulse-dashboard) and [ecommerce-sql](https://github.com/tarang-tj/ecommerce-sql). Same engineering habit, different tools.
-
-### Focus
-
-RAG evaluation, retrieval, and agentic workflows with the Claude API. Python and TypeScript.
-
-Looking for applied AI and forward-deployed engineering roles starting June 2027.
-
-### Contact
-
-[LinkedIn](https://linkedin.com/in/tarang-tj) &middot; [Portfolio](https://tarang-tj.github.io) &middot; tarangjammalamadaka9@gmail.com
+open to applied AI and forward deployed engineering roles starting June 2027.
