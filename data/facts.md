@@ -56,8 +56,9 @@ internship built with React Three Fiber and Vite.
 
 ## How to reach TJ
 
-Portfolio: tarang-tj.github.io. LinkedIn: linkedin.com/in/tarang-tj. The fastest way
-to start a conversation is to open an issue on this repo.
+Portfolio: tarang-tj.github.io. LinkedIn: linkedin.com/in/tarang-tj. X: x.com/btwitstj.
+HackerRank: hackerrank.com/profile/tarangtj. The fastest way to start a conversation is
+to open an issue on this repo.
 
 ## How this README works
 
