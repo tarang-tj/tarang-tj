@@ -51,9 +51,8 @@ simulation of multi-stage operational workflows with SimPy.
 ## 3D and frontend work
 
 The portfolio at tarang-tj.github.io is a hand-coded interactive 3D site built with
-Three.js and vanilla JS. 3d-ramenshop-portfolio is a single-file Three.js r128
-scene. Coke-Recap is an interactive 3D recap of the Coca-Cola internship built with
-React Three Fiber and Vite.
+Three.js and vanilla JS. Coke-Recap is an interactive 3D recap of the Coca-Cola
+internship built with React Three Fiber and Vite.
 
 ## How to reach TJ
 
