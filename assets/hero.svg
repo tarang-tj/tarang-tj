@@ -1,4 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 257" width="880" height="257" role="img" aria-label="Live scoreboard: 0 questions asked of this profile's grounded bot, 0 answered and 0 unanswered, no model-written answer has been scored yet.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 374" width="880" height="374" role="img" aria-label="Suite coverage 77%, one reading so far. 0 questions asked of this profile's grounded bot, 0 answered and 0 unanswered, no model-written answer has been scored yet.">
+<defs>
+  <linearGradient id="hero-fill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#7FD1A8" stop-opacity="0.28"/>
+    <stop offset="1" stop-color="#7FD1A8" stop-opacity="0.02"/>
+  </linearGradient>
+  <linearGradient id="hero-beam" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#7FD1A8" stop-opacity="0"/>
+    <stop offset="1" stop-color="#7FD1A8" stop-opacity="0.13"/>
+  </linearGradient>
+  <clipPath id="hero-plot">
+    <rect x="68" y="118" width="780" height="101"/>
+  </clipPath>
+</defs>
 <style>
   .panel { fill: #121821; stroke: #263041; }
   text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
@@ -12,26 +25,54 @@
   .sep { fill: #1E2836; }
   .note { fill: #8B98A9; font-size: 12px; }
   .rule { stroke: #1E2836; stroke-width: 1; }
+  .grid { stroke: #1B2430; stroke-width: 1; }
+  .ref { stroke: #1E2836; stroke-width: 1; stroke-dasharray: 3 5; }
+  .axis-line { stroke: #263041; stroke-width: 1; }
+  .axis { fill: #8B98A9; font-size: 10.5px; opacity: 0.8; }
+  .tick-key { fill: #F2A65A; font-weight: 700; }
+  .empty { fill: #8B98A9; font-size: 13px; }
+  .area { fill: url(#hero-fill); }
+  .line { fill: none; stroke: #7FD1A8; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .lone { stroke: #7FD1A8; stroke-width: 1.5; stroke-dasharray: 4 6; opacity: 0.55; }
+  .dot { fill: #7FD1A8; opacity: 0.65; }
+  .head { fill: #7FD1A8; }
+  .head-halo { fill: #7FD1A8; opacity: 0.2; }
+  .tick { stroke: #F2A65A; stroke-width: 1.6; opacity: 0.9; }
   /* GitHub serves this file as image/svg+xml with the stylesheet intact, so CSS
      animation does play in a browser. It is still written so that every element's
-     RESTING state is the finished state: nothing animates in from opacity 0. A
-     still frame of this panel is complete, which keeps it correct anywhere the SVG
-     gets rasterised (link previews, screenshots, some readers). Exactly one thing
-     moves, and only because it carries meaning: the most recent trial. */
-  .fresh { animation: pulse 1.9s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .42; } }
+     RESTING state is the finished state: no real content animates in from opacity
+     0, and the one moving part is a decorative overlay that is invisible at frame
+     0. A still frame of this panel is the complete chart, which keeps it correct
+     anywhere the SVG gets rasterised (link previews, screenshots, crawlers). The
+     sweep is a scope line travelling across the trace and nothing else moves. */
+  .sweep { animation: sweep 7s linear infinite; }
+  @keyframes sweep {
+    0% { transform: translateX(0); opacity: 0; }
+    6% { opacity: 0.85; }
+    62% { opacity: 0.85; }
+    70% { transform: translateX(780px); opacity: 0; }
+    100% { transform: translateX(780px); opacity: 0; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .fresh { animation: none; }
+    .sweep { animation: none; }
   }
 </style>
-<rect class="panel" x="0.5" y="0.5" width="879" height="256" rx="14"/>
-<text class="eyebrow" x="32" y="42">ADVERSARIAL EVAL</text>
-<text class="stamp" x="848" y="42" text-anchor="end">0 trials · updated 2026-07-26</text>
+<rect class="panel" x="0.5" y="0.5" width="879" height="373" rx="14"/>
+<text class="eyebrow" x="32" y="42">COVERAGE DRIFT</text>
+<text class="stamp" x="848" y="42" text-anchor="end">1 reading · 0 trials · updated 2026-07-26</text>
 <line class="rule" x1="32" y1="62" x2="848" y2="62"/>
-<text x="32" y="92"><tspan class="rate">trial 001</tspan><tspan class="rate-label"> unclaimed</tspan></text>
-<rect x="32" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="50" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="68" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="86" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="104" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="122" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="140" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="158" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="176" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="194" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="212" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="230" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="248" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="266" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="284" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="302" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="320" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="338" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="356" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="374" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="392" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="410" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="428" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="446" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="464" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="482" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="500" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="518" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="536" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="554" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="572" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="590" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="608" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="626" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="644" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="662" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="680" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="698" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="716" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="734" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="752" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="770" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="788" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="806" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="824" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="32" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="50" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="68" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="86" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="104" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="122" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="140" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="158" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="176" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="194" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="212" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="230" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="248" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="266" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="284" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="302" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="320" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="338" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="356" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="374" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="392" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="410" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="428" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="446" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="464" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="482" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="500" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="518" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="536" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="554" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="572" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="590" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="608" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="626" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="644" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="662" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="680" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="698" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="716" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="734" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="752" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="770" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="788" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="806" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="824" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/>
-<text class="stat" x="32" y="173">no one has tried yet. an untested claim is just a claim.</text>
-<text class="stat" x="32" y="193">no model-written answer scored yet. a grounding score needs a generated answer.</text>
-<line class="rule" x1="32" y1="213" x2="848" y2="213"/>
-<text class="note" x="32" y="239">every question a visitor asks is logged here, answered or not.</text>
+<text x="32" y="92"><tspan class="rate">77%</tspan><tspan class="rate-label"> of its own question suite answerable from its own facts</tspan></text>
+<line class="grid" x1="68" y1="118" x2="68" y2="206"/><line class="grid" x1="263" y1="118" x2="263" y2="206"/><line class="grid" x1="458" y1="118" x2="458" y2="206"/><line class="grid" x1="653" y1="118" x2="653" y2="206"/><line class="grid" x1="848" y1="118" x2="848" y2="206"/><line class="ref" x1="68" y1="118" x2="848" y2="118"/><text class="axis" x="58" y="121.5" text-anchor="end">1.0</text><line class="ref" x1="68" y1="162" x2="848" y2="162"/><text class="axis" x="58" y="165.5" text-anchor="end">0.5</text><line class="axis-line" x1="68" y1="206" x2="848" y2="206"/>
+<line class="lone" x1="68" y1="137.6" x2="848" y2="137.6"/><circle class="head-halo" cx="848" cy="137.6" r="5.5"/><circle class="head" cx="848" cy="137.6" r="3"/>
+
+<g clip-path="url(#hero-plot)"><g class="sweep" opacity="0">
+  <rect x="-42" y="118" width="110" height="88" fill="url(#hero-beam)"/>
+  <line x1="68" y1="118" x2="68" y2="219" stroke="#7FD1A8" stroke-width="1.25" stroke-opacity="0.65"/>
+</g></g>
+<text class="axis" x="848" y="236" text-anchor="end">2026-07-26</text>
+<text class="stat" x="32" y="270"><tspan class="figure">14</tspan> of <tspan class="figure">18</tspan> suite questions covered<tspan class="sep">  ·  </tspan><tspan class="fig-amber">4</tspan> uncovered</text>
+<text class="stat" x="32" y="290">no one has tried yet. an untested claim is just a claim.</text>
+<text class="stat" x="32" y="310">no model-written answer scored yet. a grounding score needs a generated answer.</text>
+<line class="rule" x1="32" y1="330" x2="848" y2="330"/>
+<text class="note" x="32" y="356">every question a visitor asks is logged here, answered or not.</text>
 </svg>

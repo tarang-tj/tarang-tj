@@ -1,23 +1,23 @@
-name: Try to stump it
-description: Ask something the bot can't answer from data/facts.md. If it can't, you score.
+name: add a failing test case
+description: ask something the retrieval harness cannot cover from data/facts.md. if it cannot, that is a failing test.
 title: "stump: "
 labels: ["trial"]
 body:
   - type: markdown
     attributes:
       value: |
-        The bot answers using [`data/facts.md`](https://github.com/tarang-tj/tarang-tj/blob/main/data/facts.md) and nothing else.
+        the harness ranks [`data/facts.md`](https://github.com/tarang-tj/tarang-tj/blob/main/data/facts.md) against your question and answers only from what it retrieves. no tools, no web access, no guessing.
 
-        **It answers** → the trial is logged as *held*.
-        **It can't** → you scored a *break*, your handle goes on the board, and the gap
-        stays listed on the profile until TJ writes the missing fact.
+        **it retrieves something** → the trial is logged as *held*.
+        **it retrieves nothing** → that is a failing test, your handle goes on the board, and the gap
+        stays listed on the profile until tj writes the missing fact.
 
-        Either way the result is committed to the README within about a minute.
+        either way the result is committed to the README within about a minute.
   - type: textarea
     id: question
     attributes:
       label: Question
-      description: One question scores better than five. Specific beats broad.
+      description: one question scores better than five. specific beats broad.
       placeholder: what does ragproof actually measure?
     validations:
       required: true

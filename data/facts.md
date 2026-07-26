@@ -1,10 +1,11 @@
 # Grounding facts
 
-The AMA bot answers only from this file. Every section is something already public
-in a repo description, the README, or the portfolio site. If a question isn't
-covered here, the bot says so instead of guessing. that is the whole point.
+the retrieval harness answers only from this file. every section is something
+already public in a repo description, the README, or the portfolio site. if a
+question isn't covered here, the harness says so instead of guessing. that is the
+whole point.
 
-Edit this file to change what the bot knows.
+edit this file to change what it can answer.
 
 ## Who TJ is
 
@@ -62,7 +63,7 @@ to start a conversation is to open an issue on this repo.
 ## How this README works
 
 The panel at the top is regenerated daily by a GitHub Action that reads the GitHub
-API, recomputes the numbers, and redraws the SVG. The AMA is a second Action: it
-reads the question from the issue, retrieves the relevant sections of this file,
+API, recomputes the numbers, and redraws the SVG. The retrieval harness is a second
+Action: it reads the question from the issue, retrieves the relevant sections of this file,
 asks Claude to answer using only those sections, posts the answer as a comment, and
 rewrites the recent-questions table in the README. Code is in scripts/ in this repo.

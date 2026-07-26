@@ -65,9 +65,29 @@ export function parseSections(markdown) {
     .filter((s) => s.body);
 }
 
+// The section that answers "who is this". Named by title so the corpus can be
+// reordered without breaking the fallback; first section if no title matches.
+const identityIndex = (sections) => {
+  const i = sections.findIndex((s) => /who .* is/i.test(s.title));
+  return i === -1 ? 0 : i;
+};
+
+// A question with no content tokens left is asking the broadest thing there is:
+// every word in it was a pronoun, an auxiliary verb or his own name ("who is tj
+// and what does he do"). That is the one question the corpus definitely answers,
+// so it routes to the identity section rather than being logged as a gap. Note
+// this only fires when NOTHING survives: "what is tj's shoe size" keeps "shoe"
+// and "size", scores 0 against every section, and stays a genuine break.
+function overview(sections, k) {
+  if (!sections.length) return [];
+  const i = identityIndex(sections);
+  const rest = sections.filter((_, j) => j !== i).map((s) => ({ ...s, score: 0 }));
+  return [{ ...sections[i], score: 1 }, ...rest].slice(0, k);
+}
+
 export function rank(sections, question, k = 6) {
   const q = tokenize(normalise(question));
-  if (!q.length) return sections.slice(0, k);
+  if (!q.length) return overview(sections, k);
   const scored = sections.map((s) => {
     const hay = tokenize(`${s.title} ${s.body}`);
     const bag = new Set(hay);

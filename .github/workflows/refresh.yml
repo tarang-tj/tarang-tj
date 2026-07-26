@@ -38,6 +38,12 @@ jobs:
           REPO: ${{ github.repository }}
         run: node scripts/close-gaps.mjs
 
+      # Runs before the rebuild so the day's coverage figure is already on disk
+      # when the panel is drawn. Pure retrieval over local files: no model, no
+      # network, so it cannot fail the job for someone else's outage.
+      - name: Run the self-test suite
+        run: node scripts/run-selftest.mjs
+
       - name: Rebuild README and hero panel
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,7 +53,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md assets/hero.svg data/stats.json data/eval.json
+          git add README.md assets/hero.svg data/stats.json data/eval.json data/history.json
           git diff --staged --quiet && echo "nothing changed" && exit 0
           git commit -m "chore: refresh profile stats"
           git push

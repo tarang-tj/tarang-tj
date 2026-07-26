@@ -3,7 +3,7 @@
   Rebuild with: node scripts/build.mjs
 -->
 
-<img src="assets/hero.svg" alt="Adversarial eval scoreboard: 0 questions asked of this profile's grounded bot, 0 answered from its own facts and 0 unanswered. Updated 2026-07-26." width="880">
+<img src="assets/hero.svg" alt="Adversarial eval scoreboard: 0 questions put to this profile's retrieval harness, 0 answered from its own facts and 0 unanswered. Updated 2026-07-26." width="880">
 
 hi, i'm tj. i build applied AI systems, and i build the harnesses that check whether they're telling the truth.
 
@@ -11,29 +11,39 @@ right now that's [ragproof](https://github.com/tarang-tj/ragproof), an open sour
 
 applied AI and martech at The Coca-Cola Company, Ignite Program, Atlanta. MIS at UW Bothell, class of 2027.
 
-## try to stump it
+## add a failing test case
 
-most profiles tell you what someone is good at. this one lets you test it.
+behind this README is a retrieval harness pointed at [`data/facts.md`](data/facts.md). it
+ranks the corpus against your question, answers only from what it retrieves, and grades that
+answer with the same code as [ragproof](https://github.com/tarang-tj/ragproof). no tools, no
+web access, no guessing.
 
-there's a bot behind this README that answers questions about me using nothing but
-[`data/facts.md`](data/facts.md). it has no tools, no web access, and no permission to guess.
-your job is to ask something it can't answer.
+a question the corpus can't cover is a failing test. it goes on the list below until i write
+the missing fact. one click files it, question and title already filled in:
 
-- **it answers** → the trial is logged as **held**, and you get a cited answer.
-- **it can't** → you scored a **break**. your handle goes on the board, and the gap goes
-  on the list below until i close it by writing the missing fact.
+[what does claude-skill-audit scan for?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20what%20does%20claude-skill-audit%20scan%20for%3F&question=what%20does%20claude-skill-audit%20scan%20for%3F)
+· [how does the-breaker fail safe?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20how%20does%20the-breaker%20fail%20safe%3F&question=how%20does%20the-breaker%20fail%20safe%3F)
+· [which database does ecommerce-sql use?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20which%20database%20does%20ecommerce-sql%20use%3F&question=which%20database%20does%20ecommerce-sql%20use%3F)
+· [what is the portfolio built with?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20what%20is%20the%20portfolio%20built%20with%3F&question=what%20is%20the%20portfolio%20built%20with%3F)
+· [what is the hardest bug tj has debugged?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20what%20is%20the%20hardest%20bug%20tj%20has%20debugged%3F&question=what%20is%20the%20hardest%20bug%20tj%20has%20debugged%3F)
 
-the score is public either way. an eval you can only pass isn't an eval.
-
-[**→ try to stump it**](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A+) &nbsp;·&nbsp; **0** trials · **n/a** answered · **0** gaps still open
+or [write your own](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A+).
+**0** trials · **n/a** answered · **0** gaps open.
 
 ### gaps it hasn't closed yet
 
-_Nothing open right now. Every question anyone has asked is covered by the facts file._
+_nothing open right now. every question anyone has asked is covered by the facts file._
 
-### who's broken it
+### daily self-test: 14/18 covered, 77%
 
-_No one has stumped it yet._
+- What is a project that failed, and what did you take away from it?
+- What compensation are you expecting for a full time offer?
+- Which programming paradigm do you dislike most, and defend that opinion?
+- Who could give a reference for your teamwork?
+
+### who found a gap
+
+_no one has stumped it yet._
 
 ## selected work
 
