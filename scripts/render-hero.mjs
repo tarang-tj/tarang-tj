@@ -1,5 +1,8 @@
-// Draws the verification panel at the top of the README.
-// Static by design. See the note on animation in the stylesheet below.
+// Draws the live scoreboard at the top of the README.
+//
+// The profile is an evaluation harness pointed at itself: every question a visitor
+// asks is a trial, drawn as one mark in a test-suite strip. Mint held, amber broke.
+// See the note on animation in the stylesheet below.
 const C = {
   panel: "#121821",
   border: "#263041",
@@ -8,79 +11,108 @@ const C = {
   muted: "#8B98A9",
   amber: "#F2A65A",
   mint: "#7FD1A8",
+  empty: "#1B2430",
 };
 
 const W = 880;
 const PAD = 32;
-const ROW_TOP = 100;
-const ROW_STEP = 38;
-// Canvas height is derived from the row count so the footer note can never be
-// clipped when a row is added or removed.
-const heightFor = (rowCount) => ROW_TOP + rowCount * ROW_STEP + 50;
+const CELL = 13;
+const GAP = 5;
+const PER_ROW = Math.floor((W - PAD * 2 + GAP) / (CELL + GAP));
+// Always draw a full grid so the panel keeps its shape from the first day.
+const MIN_SLOTS = PER_ROW * 2;
 
 const esc = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-// Each row is a claim plus the artifact that backs it. `value` is either a
-// literal fact already public in the linked repo, or a number from the API.
-function buildRows(stats) {
-  const langs = stats.languages.map((l) => l.name).slice(0, 3).join(" · ");
-  return [
-    { label: "ships", value: `${stats.publicRepos} public repos · ${stats.stars} stars`, receipt: "/repos" },
-    { label: "retrieval", value: "ragproof · evaluated on BEIR", receipt: "/ragproof" },
-    { label: "agent safety", value: "the-breaker · hardware HALT", receipt: "/the-breaker" },
-    { label: "in production", value: "SyllabusAI · 500+ users", receipt: "syllabusai.net" },
-    { label: "works in", value: langs || "Python · TypeScript", receipt: "/repos" },
+const truncate = (s, n) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
+
+function strip(entries, top) {
+  const slots = Math.max(MIN_SLOTS, Math.ceil(entries.length / PER_ROW) * PER_ROW);
+  const newest = entries.length - 1;
+  const marks = [];
+  for (let i = 0; i < slots; i++) {
+    const e = entries[i];
+    const fill = !e ? C.empty : e.verdict === "break" ? C.amber : C.mint;
+    const x = PAD + (i % PER_ROW) * (CELL + GAP);
+    const y = top + Math.floor(i / PER_ROW) * (CELL + GAP);
+    const round = e ? 3 : 2;
+    // Only the most recent trial moves, so the motion means "this just happened"
+    // rather than being decoration.
+    const cls = i === newest ? ' class="fresh"' : "";
+    marks.push(
+      `<rect${cls} x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="${round}" fill="${fill}"${e ? "" : ' opacity="0.75"'}/>`,
+    );
+  }
+  const rows = slots / PER_ROW;
+  return { markup: marks.join(""), height: rows * (CELL + GAP) - GAP };
+}
+
+function statLine(s, y) {
+  if (!s.trials) {
+    return `<text class="stat" x="${PAD}" y="${y}">no one has tried yet. an untested claim is just a claim.</text>`;
+  }
+  const parts = [
+    `<tspan class="figure">${s.held}</tspan> held`,
+    `<tspan class="fig-amber">${s.breaks}</tspan> stumped`,
+    `<tspan class="figure">${s.closed}</tspan> gaps closed`,
+    `<tspan class="figure">${s.open}</tspan> still open`,
   ];
+  return `<text class="stat" x="${PAD}" y="${y}">${parts.join('<tspan class="sep">  ·  </tspan>')}</text>`;
 }
 
-function rowMarkup(row, i) {
-  const y = ROW_TOP + i * ROW_STEP;
-  return `
-  <g class="row">
-    <text class="check" x="${PAD}" y="${y}">✓</text>
-    <text class="label" x="${PAD + 30}" y="${y}">${esc(row.label)}</text>
-    <text class="value" x="${PAD + 190}" y="${y}">${esc(row.value)}</text>
-    <text class="receipt" x="${W - PAD}" y="${y}">${esc(row.receipt)}</text>
-  </g>`;
-}
+export function renderHero(stats, s = { trials: 0 }, entries = []) {
+  const stripTop = 108;
+  const grid = strip(entries, stripTop);
+  const statY = stripTop + grid.height + 34;
+  const ruleY = statY + 20;
+  const footY = ruleY + 26;
+  const H = footY + 18;
 
-export function renderHero(stats) {
-  const rows = buildRows(stats);
-  const ruleY = 68;
-  const footY = ROW_TOP + rows.length * ROW_STEP - 4;
-  const H = heightFor(rows.length);
+  const rate =
+    s.trials > 0
+      ? `<tspan class="rate">${s.answerRate}%</tspan><tspan class="rate-label"> answered from its own facts</tspan>`
+      : `<tspan class="rate">trial 001</tspan><tspan class="rate-label"> unclaimed</tspan>`;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Verification panel: ${rows.length} claims, each linked to the repository that backs it.">
+  const last = s.lastBreak
+    ? `last break: "${esc(truncate(s.lastBreak.question, 58))}"${s.lastBreak.handle ? ` by ${esc(s.lastBreak.handle)}` : ""}`
+    : "every question a visitor asks is logged here, answered or not.";
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Live scoreboard: ${s.trials || 0} questions asked of this profile's grounded bot, ${s.held || 0} answered and ${s.breaks || 0} unanswered.">
 <style>
   .panel { fill: ${C.panel}; stroke: ${C.border}; }
   text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   .eyebrow { fill: ${C.amber}; font-size: 12px; letter-spacing: 2.6px; }
-  .stamp { fill: ${C.muted}; font-size: 12px; letter-spacing: 0.4px; }
-  .check { fill: ${C.mint}; font-size: 15px; }
-  .label { fill: ${C.ink}; font-size: 15px; }
-  .value { fill: ${C.muted}; font-size: 15px; }
-  .receipt { fill: ${C.amber}; font-size: 13px; text-anchor: end; opacity: .82; }
-  .note { fill: ${C.muted}; font-size: 12px; letter-spacing: 0.3px; }
+  .stamp { fill: ${C.muted}; font-size: 12px; }
+  .rate { fill: ${C.ink}; font-size: 26px; font-weight: 600; }
+  .rate-label { fill: ${C.muted}; font-size: 14px; }
+  .stat { fill: ${C.muted}; font-size: 13.5px; }
+  .figure { fill: ${C.mint}; font-weight: 600; }
+  .fig-amber { fill: ${C.amber}; font-weight: 600; }
+  .sep { fill: ${C.rule}; }
+  .note { fill: ${C.muted}; font-size: 12px; }
   .rule { stroke: ${C.rule}; stroke-width: 1; }
-  /* No entrance animation, deliberately. GitHub embeds this SVG through an img
-     tag, and in that context the document is rendered frozen at its first frame:
-     anything that starts at opacity 0 never becomes visible. CSS keyframes and
-     SMIL were both tested in that embedding and both left the rows blank, so the
-     panel is static and the only motion is the status dot, whose resting state
-     is already visible. */
-  .dot { fill: ${C.amber}; animation: blip 2.6s ease-in-out infinite; }
-  @keyframes blip { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-  @media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+  /* GitHub serves this file as image/svg+xml with the stylesheet intact, so CSS
+     animation does play in a browser. It is still written so that every element's
+     RESTING state is the finished state: nothing animates in from opacity 0. A
+     still frame of this panel is complete, which keeps it correct anywhere the SVG
+     gets rasterised (link previews, screenshots, some readers). Exactly one thing
+     moves, and only because it carries meaning: the most recent trial. */
+  .fresh { animation: pulse 1.9s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .42; } }
+  @media (prefers-reduced-motion: reduce) {
+    .fresh { animation: none; }
+  }
 </style>
 <rect class="panel" x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="14"/>
-<text class="eyebrow" x="${PAD}" y="42">GROUNDED PROFILE</text>
-<circle class="dot" cx="${W - PAD - 162}" cy="38" r="3.5"/>
-<text class="stamp" x="${W - PAD}" y="42" text-anchor="end">verified ${esc(stats.verifiedAt)}</text>
+<text class="eyebrow" x="${PAD}" y="42">ADVERSARIAL EVAL</text>
+<text class="stamp" x="${W - PAD}" y="42" text-anchor="end">${s.trials || 0} trials · updated ${esc(stats.verifiedAt)}</text>
+<line class="rule" x1="${PAD}" y1="62" x2="${W - PAD}" y2="62"/>
+<text x="${PAD}" y="92">${rate}</text>
+${grid.markup}
+${statLine(s, statY)}
 <line class="rule" x1="${PAD}" y1="${ruleY}" x2="${W - PAD}" y2="${ruleY}"/>
-${rows.map(rowMarkup).join("\n")}
-<line class="rule" x1="${PAD}" y1="${footY}" x2="${W - PAD}" y2="${footY}"/>
-<text class="note" x="${PAD}" y="${footY + 26}">every claim above links to the artifact that proves it. the panel is rebuilt from the GitHub API each day.</text>
+<text class="note" x="${PAD}" y="${footY}">${esc(last)}</text>
 </svg>
 `;
 }

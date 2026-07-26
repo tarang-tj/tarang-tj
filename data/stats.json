@@ -5,11 +5,11 @@
   "followers": 2,
   "languages": [
     {
-      "name": "TypeScript",
+      "name": "Python",
       "count": 4
     },
     {
-      "name": "Python",
+      "name": "TypeScript",
       "count": 4
     },
     {
@@ -17,10 +17,10 @@
       "count": 2
     },
     {
-      "name": "SQL",
+      "name": "C++",
       "count": 1
     }
   ],
-  "lastPush": "2026-07-26T00:38:40Z",
+  "lastPush": "2026-07-26T00:38:49Z",
   "verifiedAt": "2026-07-26"
 }

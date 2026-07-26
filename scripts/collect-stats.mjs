@@ -22,8 +22,11 @@ export async function collectStats() {
     if (!r.language || MARKUP.has(r.language)) continue;
     langCounts.set(r.language, (langCounts.get(r.language) ?? 0) + 1);
   }
+  // Tie-break by name so equal counts always order the same way. Without this the
+  // panel flips between equally-common languages as the API changes order, and the
+  // daily job commits a meaningless diff every run.
   const languages = [...langCounts.entries()]
-    .sort((a, b) => b[1] - a[1])
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 4)
     .map(([name, count]) => ({ name, count }));
 

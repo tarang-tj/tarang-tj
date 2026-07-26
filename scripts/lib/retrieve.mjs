@@ -1,12 +1,39 @@
 // Splits data/facts.md into sections and ranks them against a question.
 // Used twice: to build grounding context for the model, and as the answer path
 // when no API key is configured (so the bot degrades to retrieval, not to silence).
+// Function words only. Anything left in the index has to be a content word,
+// because a single match is enough to call a question covered: if a preposition
+// could score, a gap would be declared closed on the word "from".
 const STOP = new Set([
-  "the", "a", "an", "is", "are", "was", "were", "do", "does", "did", "what",
-  "who", "how", "why", "when", "where", "which", "your", "you", "yours", "of",
-  "in", "on", "for", "to", "and", "or", "it", "this", "that", "with", "about",
-  "tj", "tarang", "he", "they", "them", "his", "their",
+  // articles, conjunctions, prepositions
+  "the", "a", "an", "and", "or", "but", "if", "so", "as", "at", "by", "for",
+  "from", "in", "into", "of", "on", "onto", "to", "with", "without", "about",
+  "over", "under", "than", "then", "there", "here", "out", "up", "down", "off",
+  "per", "via", "vs", "between", "during", "after", "before", "while",
+  // pronouns and determiners
+  "i", "me", "my", "mine", "we", "us", "our", "ours", "you", "your", "yours",
+  "he", "him", "his", "she", "her", "hers", "they", "them", "their", "theirs",
+  "it", "its", "this", "that", "these", "those", "who", "whom", "whose",
+  "what", "which", "any", "all", "some", "each", "every", "both", "no", "not",
+  // verbs with no topical content
+  "is", "are", "was", "were", "be", "been", "being", "am", "do", "does", "did",
+  "done", "have", "has", "had", "can", "could", "will", "would", "shall",
+  "should", "may", "might", "must", "get", "got", "let", "make", "makes",
+  // question and filler words
+  "how", "why", "when", "where", "ever", "never", "just", "only", "also",
+  "very", "much", "many", "more", "most", "one", "two", "thing", "things",
+  "stuff", "way", "ways", "like", "tell", "say", "says", "know",
+  // the subject himself: matching his own name says nothing
+  "tj", "tarang", "jammalamadaka",
+  // url and domain debris. without these, a link pasted into a question matches
+  // "com" inside "github.com" and scores a hit on content it has nothing to do with.
+  "http", "https", "www", "com", "net", "org", "io", "dev", "app", "co", "html",
 ]);
+
+// Questions arrive from the public and may contain links or markup. Retrieval runs
+// on the prose only, so pasted urls cannot manufacture a match.
+export const normalise = (s) =>
+  s.replace(/https?:\/\/\S+/gi, " ").replace(/[<>[\]()|*_`#~\\]/g, " ");
 
 // Hyphenated and dotted compounds are indexed whole *and* in parts, so a question
 // about a "kill switch" still reaches a section that says "kill-switch".
@@ -39,7 +66,7 @@ export function parseSections(markdown) {
 }
 
 export function rank(sections, question, k = 6) {
-  const q = tokenize(question);
+  const q = tokenize(normalise(question));
   if (!q.length) return sections.slice(0, k);
   const scored = sections.map((s) => {
     const hay = tokenize(`${s.title} ${s.body}`);
@@ -57,7 +84,7 @@ export function rank(sections, question, k = 6) {
 }
 
 export function retrievalAnswer(sections, question) {
-  const top = rank(sections, question, 2).filter((s) => s.score > 0);
+  const top = rank(sections, normalise(question), 2).filter((s) => s.score > 0);
   if (!top.length) return null;
   return top.map((s) => `**${s.title}**: ${s.body.replace(/\n+/g, " ")}`).join("\n\n");
 }

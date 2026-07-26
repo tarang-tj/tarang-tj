@@ -1,0 +1,23 @@
+name: Try to stump it
+description: Ask something the bot can't answer from data/facts.md. If it can't, you score.
+title: "stump: "
+labels: ["trial"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The bot answers using [`data/facts.md`](https://github.com/tarang-tj/tarang-tj/blob/main/data/facts.md) and nothing else.
+
+        **It answers** → the trial is logged as *held*.
+        **It can't** → you scored a *break*, your handle goes on the board, and the gap
+        stays listed on the profile until TJ writes the missing fact.
+
+        Either way the result is committed to the README within about a minute.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: One question scores better than five. Specific beats broad.
+      placeholder: what does ragproof actually measure?
+    validations:
+      required: true

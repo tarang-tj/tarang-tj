@@ -1,65 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 340" width="880" height="340" role="img" aria-label="Verification panel: 5 claims, each linked to the repository that backs it.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 237" width="880" height="237" role="img" aria-label="Live scoreboard: 0 questions asked of this profile's grounded bot, 0 answered and 0 unanswered.">
 <style>
   .panel { fill: #121821; stroke: #263041; }
   text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   .eyebrow { fill: #F2A65A; font-size: 12px; letter-spacing: 2.6px; }
-  .stamp { fill: #8B98A9; font-size: 12px; letter-spacing: 0.4px; }
-  .check { fill: #7FD1A8; font-size: 15px; }
-  .label { fill: #E6EDF3; font-size: 15px; }
-  .value { fill: #8B98A9; font-size: 15px; }
-  .receipt { fill: #F2A65A; font-size: 13px; text-anchor: end; opacity: .82; }
-  .note { fill: #8B98A9; font-size: 12px; letter-spacing: 0.3px; }
+  .stamp { fill: #8B98A9; font-size: 12px; }
+  .rate { fill: #E6EDF3; font-size: 26px; font-weight: 600; }
+  .rate-label { fill: #8B98A9; font-size: 14px; }
+  .stat { fill: #8B98A9; font-size: 13.5px; }
+  .figure { fill: #7FD1A8; font-weight: 600; }
+  .fig-amber { fill: #F2A65A; font-weight: 600; }
+  .sep { fill: #1E2836; }
+  .note { fill: #8B98A9; font-size: 12px; }
   .rule { stroke: #1E2836; stroke-width: 1; }
-  /* No entrance animation, deliberately. GitHub embeds this SVG through an img
-     tag, and in that context the document is rendered frozen at its first frame:
-     anything that starts at opacity 0 never becomes visible. CSS keyframes and
-     SMIL were both tested in that embedding and both left the rows blank, so the
-     panel is static and the only motion is the status dot, whose resting state
-     is already visible. */
-  .dot { fill: #F2A65A; animation: blip 2.6s ease-in-out infinite; }
-  @keyframes blip { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-  @media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+  /* GitHub serves this file as image/svg+xml with the stylesheet intact, so CSS
+     animation does play in a browser. It is still written so that every element's
+     RESTING state is the finished state: nothing animates in from opacity 0. A
+     still frame of this panel is complete, which keeps it correct anywhere the SVG
+     gets rasterised (link previews, screenshots, some readers). Exactly one thing
+     moves, and only because it carries meaning: the most recent trial. */
+  .fresh { animation: pulse 1.9s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .42; } }
+  @media (prefers-reduced-motion: reduce) {
+    .fresh { animation: none; }
+  }
 </style>
-<rect class="panel" x="0.5" y="0.5" width="879" height="339" rx="14"/>
-<text class="eyebrow" x="32" y="42">GROUNDED PROFILE</text>
-<circle class="dot" cx="686" cy="38" r="3.5"/>
-<text class="stamp" x="848" y="42" text-anchor="end">verified 2026-07-26</text>
-<line class="rule" x1="32" y1="68" x2="848" y2="68"/>
-
-  <g class="row">
-    <text class="check" x="32" y="100">✓</text>
-    <text class="label" x="62" y="100">ships</text>
-    <text class="value" x="222" y="100">20 public repos · 10 stars</text>
-    <text class="receipt" x="848" y="100">/repos</text>
-  </g>
-
-  <g class="row">
-    <text class="check" x="32" y="138">✓</text>
-    <text class="label" x="62" y="138">retrieval</text>
-    <text class="value" x="222" y="138">ragproof · evaluated on BEIR</text>
-    <text class="receipt" x="848" y="138">/ragproof</text>
-  </g>
-
-  <g class="row">
-    <text class="check" x="32" y="176">✓</text>
-    <text class="label" x="62" y="176">agent safety</text>
-    <text class="value" x="222" y="176">the-breaker · hardware HALT</text>
-    <text class="receipt" x="848" y="176">/the-breaker</text>
-  </g>
-
-  <g class="row">
-    <text class="check" x="32" y="214">✓</text>
-    <text class="label" x="62" y="214">in production</text>
-    <text class="value" x="222" y="214">SyllabusAI · 500+ users</text>
-    <text class="receipt" x="848" y="214">syllabusai.net</text>
-  </g>
-
-  <g class="row">
-    <text class="check" x="32" y="252">✓</text>
-    <text class="label" x="62" y="252">works in</text>
-    <text class="value" x="222" y="252">TypeScript · Python · JavaScript</text>
-    <text class="receipt" x="848" y="252">/repos</text>
-  </g>
-<line class="rule" x1="32" y1="286" x2="848" y2="286"/>
-<text class="note" x="32" y="312">every claim above links to the artifact that proves it. the panel is rebuilt from the GitHub API each day.</text>
+<rect class="panel" x="0.5" y="0.5" width="879" height="236" rx="14"/>
+<text class="eyebrow" x="32" y="42">ADVERSARIAL EVAL</text>
+<text class="stamp" x="848" y="42" text-anchor="end">0 trials · updated 2026-07-26</text>
+<line class="rule" x1="32" y1="62" x2="848" y2="62"/>
+<text x="32" y="92"><tspan class="rate">trial 001</tspan><tspan class="rate-label"> unclaimed</tspan></text>
+<rect x="32" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="50" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="68" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="86" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="104" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="122" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="140" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="158" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="176" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="194" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="212" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="230" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="248" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="266" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="284" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="302" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="320" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="338" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="356" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="374" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="392" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="410" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="428" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="446" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="464" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="482" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="500" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="518" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="536" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="554" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="572" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="590" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="608" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="626" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="644" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="662" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="680" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="698" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="716" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="734" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="752" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="770" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="788" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="806" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="824" y="108" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="32" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="50" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="68" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="86" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="104" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="122" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="140" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="158" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="176" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="194" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="212" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="230" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="248" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="266" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="284" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="302" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="320" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="338" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="356" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="374" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="392" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="410" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="428" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="446" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="464" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="482" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="500" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="518" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="536" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="554" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="572" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="590" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="608" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="626" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="644" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="662" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="680" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="698" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="716" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="734" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="752" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="770" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="788" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="806" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/><rect x="824" y="126" width="13" height="13" rx="2" fill="#1B2430" opacity="0.75"/>
+<text class="stat" x="32" y="173">no one has tried yet. an untested claim is just a claim.</text>
+<line class="rule" x1="32" y1="193" x2="848" y2="193"/>
+<text class="note" x="32" y="219">every question a visitor asks is logged here, answered or not.</text>
 </svg>
