@@ -24,7 +24,7 @@ _No questions yet. Be the first: the bot answers within about a minute._
 |  |  |
 | --- | --- |
 | **[ragproof](https://github.com/tarang-tj/ragproof)** <br> RAG evaluation harness. retrieval metrics, answer faithfulness, drift detection, benchmarked on BEIR. | **[the-breaker](https://github.com/tarang-tj/the-breaker)** <br> a physical dead-man kill-switch for an autonomous agent fleet. guarded switch to Raspberry Pi authority tokens, fails safe to HALT. |
-| **[claude-skill-audit](https://github.com/tarang-tj/claude-skill-audit)** <br> audit an entire Claude Code setup in one command. prompt-injection, supply-chain, and secret-exposure risks. zero dependencies. | **[SyllabusAI](https://syllabusai.net)** <br> turns a course syllabus into a calendar import in one step. 500+ users. |
+| **[claude-skill-audit](https://github.com/tarang-tj/claude-skill-audit)** <br> audit an entire Claude Code setup in one command. prompt-injection, supply-chain, and secret-exposure risks. zero dependencies. | **[SyllabusAI](https://syllabusai.net)** <br> turns a course syllabus into a calendar import in one step.|
 | **[ecommerce-sql](https://github.com/tarang-tj/ecommerce-sql)** <br> end-to-end analytics on a normalized schema: CLV, market basket, rolling revenue windows in PostgreSQL. | **[portfolio](https://tarang-tj.github.io)** <br> hand-coded interactive 3D site. Three.js, vanilla JS, no framework. |
 
 <details>
