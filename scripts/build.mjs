@@ -25,15 +25,23 @@ function openBreaksTable(breaks) {
     return "_Nothing open right now. Every question anyone has asked is covered by the facts file._";
   }
   const rows = breaks
-    .map((b) => `| ${cell(b.question)} | ${b.handle ? `\`${cell(b.handle)}\`` : "—"} | [#${b.issue}](${b.url}) |`)
+    .map((b) => `| ${cell(b.question)} | ${b.handle ? `\`${cell(b.handle)}\`` : "anon"} | [#${b.issue}](${b.url}) |`)
     .join("\n");
   return `| the question it could not answer | found by | trial |\n| --- | --- | --- |\n${rows}`;
+}
+
+// "no measurement" prints as n/a, never as 0: an unscored metric is not a zero.
+// Two decimals at most, because the underlying figure is a mean of values that
+// can only be 0, 0.33, 0.67 or 1.
+function proxyFigure(v) {
+  if (typeof v !== "number" || !Number.isFinite(v)) return "n/a";
+  return String(Number(v.toFixed(2)));
 }
 
 function scorersList(top) {
   if (!top.length) return "_No one has stumped it yet._";
   return top
-    .map((s, i) => `${i + 1}. \`${cell(s.handle)}\` — ${s.count} break${s.count === 1 ? "" : "s"}`)
+    .map((s, i) => `${i + 1}. \`${cell(s.handle)}\` · ${s.count} break${s.count === 1 ? "" : "s"}`)
     .join("\n");
 }
 
@@ -57,6 +65,8 @@ export async function renderReadme(stats) {
     OPEN: String(s.open),
     CLOSED: String(s.closed),
     RATE: s.answerRate === null ? "n/a" : `${s.answerRate}%`,
+    GENERATED: String(s.generated ?? 0),
+    FAITHFULNESS: proxyFigure(s.meanFaithfulness),
     OPEN_BREAKS: openBreaksTable(openBreaks(entries, sections)),
     SCORERS: scorersList(scorers(entries)),
   };

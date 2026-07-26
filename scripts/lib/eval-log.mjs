@@ -9,10 +9,23 @@ import { rank } from "./retrieve.mjs";
 
 export const HELD = "held";
 export const BREAK = "break";
+export const GENERATED = "generated";
+
+// Mean of the numeric values only. Returns null for an empty set rather than 0,
+// because "no measurement" and "measured zero" are different claims.
+const mean = (values) => {
+  const nums = values.filter((v) => typeof v === "number" && Number.isFinite(v));
+  if (!nums.length) return null;
+  return nums.reduce((a, b) => a + b, 0) / nums.length;
+};
 
 export function score(entries, sections) {
   const trials = entries.length;
   const breaks = entries.filter((e) => e.verdict === BREAK);
+  // Only generated answers can be scored for quality. An extractive answer is
+  // copied out of the corpus, so its faithfulness is 1.0 by construction and
+  // averaging it in would inflate the figure with a tautology.
+  const generated = entries.filter((e) => e.answerMode === GENERATED);
 
   // Replay each break against the corpus as it stands now.
   const closed = breaks.filter((e) => {
@@ -29,6 +42,9 @@ export function score(entries, sections) {
     closed: closed.length,
     // Share of trials the corpus could answer. Deliberately not rounded up.
     answerRate: trials ? Math.floor((held / trials) * 100) : null,
+    generated: generated.length,
+    meanFaithfulness: mean(generated.map((e) => e.faithfulness)),
+    meanRelevance: mean(generated.map((e) => e.answerRelevance)),
     lastBreak: breaks.at(-1) ?? null,
   };
 }

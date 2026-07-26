@@ -7,10 +7,14 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { parseSections, rank, retrievalAnswer } from "./lib/retrieve.mjs";
 import { HELD, BREAK } from "./lib/eval-log.mjs";
+import { faithfulness, answerRelevance } from "./lib/ragproof-metrics.mjs";
 import { buildAll } from "./build.mjs";
 
 const MAX_QUESTION = 500;
 const EVAL_PATH = "data/eval.json";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
+const GROQ_TIMEOUT_MS = 20_000;
 
 const env = (name) => process.env[name] ?? "";
 
@@ -46,10 +50,18 @@ function safeQuestion(text) {
     .slice(0, 90);
 }
 
-async function askClaude(question, context) {
-  const { default: Anthropic } = await import("@anthropic-ai/sdk");
-  const client = new Anthropic();
+// Scoring-only view of a context chunk: drop the leading "#" markers of any
+// markdown heading and keep the heading words. Used before embedding, never on
+// the text sent to the model.
+function stripHeadingMarkers(chunk) {
+  return chunk.replace(/^#{1,6}[ \t]+/gm, "");
+}
 
+// Optional generator. It runs only when a GROQ_API_KEY secret exists, over the
+// free tier, with plain fetch so the repo keeps zero dependencies. Every failure
+// path returns null and the trial falls back to extractive retrieval: the
+// scoreboard must never go down because a free API had a bad minute.
+async function askGroq(question, context) {
   const system = `You answer questions about Tarang "TJ" Jammalamadaka on his GitHub profile.
 
 Rules:
@@ -61,23 +73,36 @@ Rules:
 FACTS:
 ${context}`;
 
-  const res = await client.beta.messages.create({
-    model: "claude-opus-5",
-    max_tokens: 4000,
-    output_config: { effort: "low" },
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    system,
-    messages: [{ role: "user", content: question }],
-  });
-
-  if (res.stop_reason === "refusal") return null;
-  const text = res.content
-    .filter((b) => b.type === "text")
-    .map((b) => b.text)
-    .join("")
-    .trim();
-  return text || null;
+  try {
+    const res = await fetch(GROQ_URL, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: question },
+        ],
+        max_tokens: 300,
+        temperature: 0.2,
+      }),
+      signal: AbortSignal.timeout(GROQ_TIMEOUT_MS),
+    });
+    if (!res.ok) {
+      console.error(`Groq returned ${res.status}; falling back to retrieval.`);
+      return null;
+    }
+    const data = await res.json();
+    const text = (data?.choices?.[0]?.message?.content ?? "").trim();
+    return text || null;
+  } catch (err) {
+    // Includes network failure and the timeout abort. One attempt only, no retry.
+    console.error(`Groq call failed, falling back to retrieval: ${err.message}`);
+    return null;
+  }
 }
 
 async function postComment(body) {
@@ -114,39 +139,69 @@ async function main() {
   const sections = parseSections(await readFile("data/facts.md", "utf8"));
   const ranked = rank(sections, question);
   const covered = (ranked[0]?.score ?? 0) > 0;
-  const verdict = covered ? HELD : BREAK;
+  let verdict = covered ? HELD : BREAK;
   const handle = env("ISSUE_AUTHOR");
 
   let body;
   let answeredBy = "retrieval";
+  // null until an answer text actually exists. A break produces no answer, so
+  // calling it "extractive" would inflate any count of extractive answers.
+  let answerMode = null;
+  // Answer-quality metrics, null until there is something real to measure.
+  let faith = null;
+  let relevance = null;
 
   if (!covered) {
     body = breakComment(handle);
     answeredBy = "no match";
   } else {
-    const context = ranked.map((s) => `## ${s.title}\n${s.body}`).join("\n\n");
+    const chunks = ranked.map((s) => `## ${s.title}\n${s.body}`);
+    const context = chunks.join("\n\n");
     let answer = null;
 
-    if (process.env.ANTHROPIC_API_KEY) {
-      try {
-        answer = await askClaude(question, context);
-        if (answer) answeredBy = "claude-opus-5";
-      } catch (err) {
-        console.error(`Model call failed, falling back to retrieval: ${err.message}`);
+    if (process.env.GROQ_API_KEY) {
+      answer = await askGroq(question, context);
+      if (answer) {
+        answeredBy = GROQ_MODEL;
+        answerMode = "generated";
       }
     }
     if (!answer) {
       answer = retrievalAnswer(sections, question);
-      answeredBy = process.env.ANTHROPIC_API_KEY ? "retrieval (model unavailable)" : "retrieval";
+      answeredBy = process.env.GROQ_API_KEY ? "retrieval (model unavailable)" : "retrieval";
+      if (answer) answerMode = "extractive";
     }
 
-    const source =
-      answeredBy === "claude-opus-5"
-        ? `answered by \`claude-opus-5\`, grounded only in`
-        : `answered by keyword retrieval over`;
-    body =
-      sanitize(answer) +
-      `\n\n---\n<sub>**held.** ${source} [\`data/facts.md\`](https://github.com/${env("REPO")}/blob/main/data/facts.md). if that is wrong, say so in this thread and it becomes a break.</sub>`;
+    if (!answer) {
+      // Coverage and retrievalAnswer normalise the question slightly
+      // differently, so a question can rank above zero here and still yield no
+      // answer text. No text means the corpus did not actually answer it, so
+      // the trial is a break: answerMode stays null and nothing is sanitised.
+      verdict = BREAK;
+      body = breakComment(handle);
+      answeredBy = "no match";
+    } else {
+      // Faithfulness is only meaningful for a generated answer. An extractive
+      // answer is verbatim corpus text, so it would score 1.0 by construction and
+      // that number would mean nothing. Record null instead of a flattering one.
+      if (answerMode === "generated") {
+        // Score against the chunk prose, not its markdown. The embedder splits on
+        // whitespace, so "##" is a token in every chunk and in no answer sentence,
+        // which drags every cosine down for a reason that has nothing to do with
+        // grounding. The heading words stay; only the "#" markers go. The model
+        // still receives `context` exactly as built above.
+        faith = faithfulness(answer, chunks.map(stripHeadingMarkers));
+      }
+      relevance = answerRelevance(question, answer);
+
+      const source =
+        answerMode === "generated"
+          ? `answered by \`${answeredBy}\`, grounded only in`
+          : `answered by keyword retrieval over`;
+      body =
+        sanitize(answer) +
+        `\n\n---\n<sub>**held.** ${source} [\`data/facts.md\`](https://github.com/${env("REPO")}/blob/main/data/facts.md). if that is wrong, say so in this thread and it becomes a break.</sub>`;
+    }
   }
 
   await postComment(body);
@@ -159,6 +214,9 @@ async function main() {
     question: safeQuestion(question),
     verdict,
     answeredBy,
+    answerMode,
+    faithfulness: faith,
+    answerRelevance: relevance,
     at: new Date().toISOString().slice(0, 10),
   });
   await writeFile(EVAL_PATH, `${JSON.stringify(log.slice(-200), null, 2)}\n`);

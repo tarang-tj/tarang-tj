@@ -68,11 +68,24 @@ deterministic condition rather than a judgement about how the model phrased itse
 the score can't be gamed by wording, and the model can't quietly rescue a question the
 facts don't actually cover.
 
+when the model writes the answer, the answer itself also gets scored. `faithfulness` is the
+same algorithm and the same 0.55 threshold as
+[ragproof](https://github.com/tarang-tj/ragproof), run here with the hash embedder from that
+repo's own test suite so the workflow needs no model download. that embedder only counts
+word overlap, so the number is a lexical-overlap proxy against the retrieved facts rather
+than an entailment check: it is paraphrase-blind and negation-blind, and an answer that
+borrows corpus wording while saying something false would still score well. read it as a
+smoke alarm, not a verdict. extractive answers are not scored at all, since they are copied
+corpus text and would sit at 1.0 by construction. so far: **{{GENERATED}}** model-written
+answers scored, mean grounding proxy **{{FAITHFULNESS}}**.
+
 - `scripts/collect-stats.mjs`: repo counts, stars and language mix from the GitHub API
 - `scripts/render-hero.mjs`: draws the scoreboard. every element's resting state is its
   finished state, so a still frame of the panel is already complete
 - `scripts/lib/retrieve.mjs`: ranks facts against the question, and doubles as the answer
   path when no model key is set, so the bot degrades to retrieval rather than to silence
+- `scripts/lib/ragproof-metrics.mjs`: the faithfulness and relevance scoring, ported from
+  ragproof so the profile grades itself with the same code it ships elsewhere
 - `scripts/lib/eval-log.mjs`: scoring. it replays every past break against the current
   corpus, so a gap counts as closed only once the facts genuinely cover it
 - `scripts/run-trial.mjs`: one trial, start to finish

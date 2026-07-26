@@ -21,10 +21,6 @@ jobs:
        startsWith(github.event.issue.title, 'stump:') ||
        startsWith(github.event.issue.title, 'ask:'))
     runs-on: ubuntu-latest
-    # Job-level so the install step can branch on it; `secrets` is not
-    # available in a step-level `if`.
-    env:
-      HAS_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,7 +31,7 @@ jobs:
           node-version: "22"
 
       # Public repo, public trigger: cap how many trials run per day so a burst
-      # cannot run up an API bill.
+      # cannot exhaust the free-tier rate limit.
       - name: Daily budget guard
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,14 +46,16 @@ jobs:
             echo "SKIP=1" >> "$GITHUB_ENV"
           fi
 
-      - name: Install SDK
-        if: env.SKIP != '1' && env.HAS_KEY == 'true'
-        run: npm install --no-save @anthropic-ai/sdk
-
       - name: Run the trial
         if: env.SKIP != '1'
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Optional. No secret means the trial answers by retrieval, which is
+          # the same code path the fallback uses, so nothing here can break it.
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          # Optional repo variable. Unset or empty falls back to the default
+          # model in scripts/run-trial.mjs, so the model can change without
+          # editing this workflow.
+          GROQ_MODEL: ${{ vars.GROQ_MODEL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}

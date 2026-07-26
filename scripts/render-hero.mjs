@@ -61,11 +61,49 @@ function statLine(s, y) {
   return `<text class="stat" x="${PAD}" y="${y}">${parts.join('<tspan class="sep">  ·  </tspan>')}</text>`;
 }
 
+const num = (v) => typeof v === "number" && Number.isFinite(v);
+// Two decimals at most. Per-trial faithfulness can only land on 0, .33, .67 or 1
+// because answers are capped at three sentences, so more precision is noise.
+const proxy = (v) => String(Number(v.toFixed(2)));
+
+// Faithfulness here is ragproof's algorithm and threshold run with the hash
+// bag-of-words embedder from that repo's test suite, so it measures lexical
+// overlap with the retrieved facts, not entailment. The panel says "proxy" and
+// says so in words, because a bare 0.67 would read as a claim it cannot support.
+function groundingLine(s, y) {
+  const parts = [];
+  if (!s.generated) {
+    parts.push("no model-written answer scored yet. a grounding score needs a generated answer.");
+  } else {
+    parts.push(`<tspan class="figure">${s.generated}</tspan> model-written`);
+    if (num(s.meanFaithfulness)) {
+      parts.push(`grounding proxy <tspan class="figure">${proxy(s.meanFaithfulness)}</tspan>`);
+      parts.push("lexical overlap, not entailment");
+    } else {
+      parts.push("grounding not scored");
+    }
+  }
+  return `<text class="stat" x="${PAD}" y="${y}">${parts.join('<tspan class="sep">  ·  </tspan>')}</text>`;
+}
+
+// The grounding row, said in words for a screen reader. Same honest framing the
+// panel gives sighted readers: how many answers the model wrote, the proxy figure
+// only when there is one, and what the proxy actually measures.
+function ariaGrounding(s) {
+  const generated = num(s.generated) ? s.generated : 0;
+  if (!generated) return "no model-written answer has been scored yet";
+  const figure = num(s.meanFaithfulness)
+    ? `a grounding proxy of ${proxy(s.meanFaithfulness)} from lexical overlap, not entailment`
+    : "no grounding score yet";
+  return `${generated} of them model-written with ${figure}`;
+}
+
 export function renderHero(stats, s = { trials: 0 }, entries = []) {
   const stripTop = 108;
   const grid = strip(entries, stripTop);
   const statY = stripTop + grid.height + 34;
-  const ruleY = statY + 20;
+  const groundY = statY + 20;
+  const ruleY = groundY + 20;
   const footY = ruleY + 26;
   const H = footY + 18;
 
@@ -78,7 +116,7 @@ export function renderHero(stats, s = { trials: 0 }, entries = []) {
     ? `last break: "${esc(truncate(s.lastBreak.question, 58))}"${s.lastBreak.handle ? ` by ${esc(s.lastBreak.handle)}` : ""}`
     : "every question a visitor asks is logged here, answered or not.";
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Live scoreboard: ${s.trials || 0} questions asked of this profile's grounded bot, ${s.held || 0} answered and ${s.breaks || 0} unanswered.">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Live scoreboard: ${s.trials || 0} questions asked of this profile's grounded bot, ${s.held || 0} answered and ${s.breaks || 0} unanswered, ${ariaGrounding(s)}.">
 <style>
   .panel { fill: ${C.panel}; stroke: ${C.border}; }
   text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
@@ -111,6 +149,7 @@ export function renderHero(stats, s = { trials: 0 }, entries = []) {
 <text x="${PAD}" y="92">${rate}</text>
 ${grid.markup}
 ${statLine(s, statY)}
+${groundingLine(s, groundY)}
 <line class="rule" x1="${PAD}" y1="${ruleY}" x2="${W - PAD}" y2="${ruleY}"/>
 <text class="note" x="${PAD}" y="${footY}">${esc(last)}</text>
 </svg>
