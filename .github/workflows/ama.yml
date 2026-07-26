@@ -1,0 +1,76 @@
+name: answer question
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: profile-write
+  cancel-in-progress: false
+
+jobs:
+  answer:
+    # Only questions, only humans.
+    if: >
+      github.event.issue.user.type != 'Bot' &&
+      (contains(github.event.issue.labels.*.name, 'ask') ||
+       startsWith(github.event.issue.title, 'ask:'))
+    runs-on: ubuntu-latest
+    # Job-level so the install step can branch on it; `secrets` is not
+    # available in a step-level `if`.
+    env:
+      HAS_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Public repo, public trigger: cap how many questions get answered per day
+      # so a burst can't run up an API bill.
+      - name: Daily budget guard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          since=$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)
+          count=$(gh api -X GET search/issues \
+            -f q="repo:${{ github.repository }} is:issue label:ask created:>=$since" \
+            --jq '.total_count')
+          echo "questions in the last 24h: $count"
+          if [ "$count" -gt 25 ]; then
+            echo "::warning::daily question budget reached; skipping"
+            echo "SKIP=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Install SDK
+        if: env.SKIP != '1' && env.HAS_KEY == 'true'
+        run: npm install --no-save @anthropic-ai/sdk
+
+      - name: Answer
+        if: env.SKIP != '1'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: node scripts/ama.mjs
+
+      - name: Commit the updated question log
+        if: env.SKIP != '1'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md data/ama.json
+          git diff --staged --quiet && echo "nothing changed" && exit 0
+          git commit -m "chore: log answered question #${{ github.event.issue.number }}"
+          git push

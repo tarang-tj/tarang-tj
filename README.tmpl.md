@@ -3,7 +3,7 @@
   Rebuild with: node scripts/build.mjs
 -->
 
-<img src="assets/hero.svg" alt="Grounded profile: 20 public repos, 10 stars, each claim linked to the repo that proves it. Verified 2026-07-26." width="880">
+<img src="assets/hero.svg" alt="Grounded profile: {{REPOS}} public repos, {{STARS}} stars, each claim linked to the repo that proves it. Verified {{VERIFIED}}." width="880">
 
 hi, i'm tj. i build applied AI systems, and i build the things that check whether they're telling the truth.
 
@@ -17,7 +17,7 @@ this profile answers questions. open an issue, and a GitHub Action retrieves the
 
 [**→ ask a question**](https://github.com/tarang-tj/tarang-tj/issues/new?template=ask.yml&title=ask%3A+) &nbsp;·&nbsp; try _"what does ragproof actually measure?"_ or _"what's the hardest thing you've shipped?"_
 
-_No questions yet. Be the first: the bot answers within about a minute._
+{{AMA_TABLE}}
 
 ## selected work
 
@@ -72,6 +72,6 @@ the model never gets tools, never sees anything outside `data/facts.md`, and que
 
 ## elsewhere
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · working in TypeScript · Python · SQL · JavaScript
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · working in {{LANGS}}
 
 open to applied AI and forward deployed engineering roles starting June 2027.

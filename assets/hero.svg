@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 340" width="880" height="340" role="img" aria-label="Verification panel: 5 claims, each linked to the repository that backs it.">
+<style>
+  .panel { fill: #121821; stroke: #263041; }
+  text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .eyebrow { fill: #F2A65A; font-size: 12px; letter-spacing: 2.6px; }
+  .stamp { fill: #8B98A9; font-size: 12px; letter-spacing: 0.4px; }
+  .check { fill: #7FD1A8; font-size: 15px; }
+  .label { fill: #E6EDF3; font-size: 15px; }
+  .value { fill: #8B98A9; font-size: 15px; }
+  .receipt { fill: #F2A65A; font-size: 13px; text-anchor: end; opacity: .82; }
+  .note { fill: #8B98A9; font-size: 12px; letter-spacing: 0.3px; }
+  .rule { stroke: #1E2836; stroke-width: 1; }
+  /* No entrance animation, deliberately. GitHub embeds this SVG through an img
+     tag, and in that context the document is rendered frozen at its first frame:
+     anything that starts at opacity 0 never becomes visible. CSS keyframes and
+     SMIL were both tested in that embedding and both left the rows blank, so the
+     panel is static and the only motion is the status dot, whose resting state
+     is already visible. */
+  .dot { fill: #F2A65A; animation: blip 2.6s ease-in-out infinite; }
+  @keyframes blip { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+  @media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+</style>
+<rect class="panel" x="0.5" y="0.5" width="879" height="339" rx="14"/>
+<text class="eyebrow" x="32" y="42">GROUNDED PROFILE</text>
+<circle class="dot" cx="686" cy="38" r="3.5"/>
+<text class="stamp" x="848" y="42" text-anchor="end">verified 2026-07-26</text>
+<line class="rule" x1="32" y1="68" x2="848" y2="68"/>
+
+  <g class="row">
+    <text class="check" x="32" y="100">✓</text>
+    <text class="label" x="62" y="100">ships</text>
+    <text class="value" x="222" y="100">20 public repos · 10 stars</text>
+    <text class="receipt" x="848" y="100">/repos</text>
+  </g>
+
+  <g class="row">
+    <text class="check" x="32" y="138">✓</text>
+    <text class="label" x="62" y="138">retrieval</text>
+    <text class="value" x="222" y="138">ragproof · evaluated on BEIR</text>
+    <text class="receipt" x="848" y="138">/ragproof</text>
+  </g>
+
+  <g class="row">
+    <text class="check" x="32" y="176">✓</text>
+    <text class="label" x="62" y="176">agent safety</text>
+    <text class="value" x="222" y="176">the-breaker · hardware HALT</text>
+    <text class="receipt" x="848" y="176">/the-breaker</text>
+  </g>
+
+  <g class="row">
+    <text class="check" x="32" y="214">✓</text>
+    <text class="label" x="62" y="214">in production</text>
+    <text class="value" x="222" y="214">SyllabusAI · 500+ users</text>
+    <text class="receipt" x="848" y="214">syllabusai.net</text>
+  </g>
+
+  <g class="row">
+    <text class="check" x="32" y="252">✓</text>
+    <text class="label" x="62" y="252">works in</text>
+    <text class="value" x="222" y="252">TypeScript · Python · SQL</text>
+    <text class="receipt" x="848" y="252">/repos</text>
+  </g>
+<line class="rule" x1="32" y1="286" x2="848" y2="286"/>
+<text class="note" x="32" y="312">every claim above links to the artifact that proves it. the panel is rebuilt from the GitHub API each day.</text>
+</svg>

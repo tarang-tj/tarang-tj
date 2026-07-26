@@ -1,0 +1,43 @@
+name: refresh profile
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # daily, 06:17 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "README.tmpl.md"
+      - "scripts/**"
+      - "data/facts.md"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-write
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Rebuild README and hero panel
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/build.mjs
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md assets/hero.svg data/stats.json
+          git diff --staged --quiet && echo "nothing changed" && exit 0
+          git commit -m "chore: refresh profile stats"
+          git push

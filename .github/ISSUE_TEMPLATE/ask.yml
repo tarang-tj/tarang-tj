@@ -1,0 +1,18 @@
+name: Ask this README a question
+description: A GitHub Action answers using only the facts in data/facts.md, then posts back here.
+title: "ask: "
+labels: ["ask"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The bot answers from [`data/facts.md`](https://github.com/tarang-tj/tarang-tj/blob/main/data/facts.md) and nothing else.
+        If your question isn't covered there it will say so rather than guess, and TJ will pick it up himself.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: One question works better than five.
+      placeholder: what does ragproof actually measure?
+    validations:
+      required: true
