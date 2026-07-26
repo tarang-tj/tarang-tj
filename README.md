@@ -127,6 +127,6 @@ and closing the issue. the score is honest, not automatic.
 
 ## elsewhere
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 20 public repos · working in Python · TypeScript · JavaScript · C++
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 19 public repos · working in Python · TypeScript · JavaScript · C++
 
 open to applied AI and forward deployed engineering roles starting June 2027.
