@@ -72,6 +72,6 @@ the model never gets tools, never sees anything outside `data/facts.md`, and que
 
 ## elsewhere
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · working in TypeScript · Python · SQL · JavaScript
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · working in TypeScript · Python · JavaScript · SQL
 
 open to applied AI and forward deployed engineering roles starting June 2027.

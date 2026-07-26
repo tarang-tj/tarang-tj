@@ -57,7 +57,7 @@
   <g class="row">
     <text class="check" x="32" y="252">✓</text>
     <text class="label" x="62" y="252">works in</text>
-    <text class="value" x="222" y="252">TypeScript · Python · SQL</text>
+    <text class="value" x="222" y="252">TypeScript · Python · JavaScript</text>
     <text class="receipt" x="848" y="252">/repos</text>
   </g>
 <line class="rule" x1="32" y1="286" x2="848" y2="286"/>
