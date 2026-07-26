@@ -23,7 +23,7 @@ right now. Repo: github.com/tarang-tj/ragproof
 ## SyllabusAI
 
 Turns a course syllabus into a calendar you can import into Apple or Google
-Calendar, in one step. Live at syllabusai.net.
+Calendar, in one step.
 
 ## claude-skill-audit
 
