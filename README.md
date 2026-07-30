@@ -3,7 +3,7 @@
   Rebuild with: node scripts/build.mjs
 -->
 
-<img src="assets/hero.svg" alt="Adversarial eval scoreboard: 0 questions put to this profile's retrieval harness, 0 answered from its own facts and 0 unanswered. Updated 2026-07-29." width="880">
+<img src="assets/hero.svg" alt="Adversarial eval scoreboard: 0 questions put to this profile's retrieval harness, 0 answered from its own facts and 0 unanswered. Updated 2026-07-30." width="880">
 
 hi, i'm tj. i build applied AI systems, and i build the harnesses that check whether they're telling the truth.
 
