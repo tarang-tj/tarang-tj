@@ -1,11 +1,11 @@
-// The build gate. Run from the repo root: node --test scripts/
+// The build gate. Run: npm test
 //
-// This repo had no test of any kind, so a template token that never got
-// substituted, or a theme that silently stopped rendering, would have shipped to
-// the profile and been discovered by a visitor. These assertions are the cheapest
-// things that would have caught that.
+// This repo had no test of any kind, so an unsubstituted template token or a
+// theme that quietly stopped rendering would have shipped to the profile and
+// been found by a visitor. These are the cheapest assertions that would have
+// caught the things that actually went wrong while building it.
 //
-// Pure: it renders to strings and asserts on them. Nothing here writes a file, so
+// Pure: renders to strings and asserts on them. Nothing writes a file, so
 // running the suite cannot leave the working tree dirty.
 
 import { test } from "node:test";
@@ -18,145 +18,92 @@ const stats = JSON.parse(await readFile("data/stats.json", "utf8"));
 const history = JSON.parse(await readFile("data/history.json", "utf8"));
 const entries = JSON.parse(await readFile("data/eval.json", "utf8"));
 const score = { trials: 0, held: 0, breaks: 0, open: 0, closed: 0 };
+const THEMES = ["dark", "light"];
+const render = (t, s = score, h = history) => renderHero(stats, s, entries, h, t);
 
 test("every template token is substituted", async () => {
   const out = await renderReadme(stats);
   const left = out.match(/\{\{\w+\}\}/g);
-  assert.equal(
-    left,
-    null,
-    `unsubstituted token(s) left in README: ${left ? [...new Set(left)].join(", ") : ""}`,
-  );
+  assert.equal(left, null, `unsubstituted token(s): ${left ? [...new Set(left)].join(", ") : ""}`);
 });
 
-test("the rendered README still carries its load-bearing sections", async () => {
+test("the README keeps its load-bearing sections", async () => {
   const out = await renderReadme(stats);
-  for (const needle of ["systems under test", "known limitations", "add a failing test case"]) {
-    assert.ok(out.includes(needle), `README lost its "${needle}" section`);
+  // One per explorable command plus the one section that must never be collapsed.
+  for (const needle of ["systems under test", "./limitations", "./stump", "ls ~/repos", "man profile"]) {
+    assert.ok(out.includes(needle), `README lost "${needle}"`);
   }
 });
 
-test("the README points at both theme assets and never at the retired single hero", async () => {
+test("the README points at both themes and not the retired single hero", async () => {
   const out = await renderReadme(stats);
   assert.ok(out.includes("assets/hero-dark.svg"), "dark hero not referenced");
   assert.ok(out.includes("assets/hero-light.svg"), "light hero not referenced");
-  assert.ok(
-    !/assets\/hero\.svg/.test(out),
-    "README still references assets/hero.svg, which is no longer generated",
-  );
+  assert.ok(!/assets\/hero\.svg/.test(out), "still references the retired assets/hero.svg");
 });
 
-test("both themes render, and they are actually different", () => {
-  const dark = renderHero(stats, score, entries, history, "dark");
-  const light = renderHero(stats, score, entries, history, "light");
-
-  for (const [name, svg] of [
-    ["dark", dark],
-    ["light", light],
-  ]) {
+test("both themes render, and they are genuinely different", () => {
+  const [dark, light] = THEMES.map((t) => render(t));
+  for (const [name, svg] of [["dark", dark], ["light", light]]) {
     assert.ok(svg.startsWith("<svg"), `${name}: not an svg`);
-    assert.ok(svg.trimEnd().endsWith("</svg>"), `${name}: unterminated svg`);
+    assert.ok(svg.trimEnd().endsWith("</svg>"), `${name}: unterminated`);
     assert.ok(/aria-label="[^"]+"/.test(svg), `${name}: missing aria-label`);
   }
+  assert.notEqual(dark, light, "the theme argument does nothing");
+  assert.ok(dark.includes("#050A07"), "dark lost its phosphor background");
+  assert.ok(light.includes("#FAF8F1"), "light lost its paper background");
+});
 
-  assert.notEqual(dark, light, "both themes rendered identically, so the theme argument does nothing");
-  assert.ok(dark.includes("#121821"), "dark theme lost its dark panel");
-  assert.ok(light.includes("#FFFFFF"), "light theme lost its light panel");
+// The light theme exists because a dark terminal pasted onto a white page looks
+// broken. If glow ever leaks into it, it stops reading as ink on paper.
+test("the light theme is a printout, not a dimmed CRT", () => {
+  const light = render("light");
+  assert.ok(!/filter="url\(#ph\)"/.test(light), "phosphor glow leaked into the light theme");
+  assert.ok(!/filter="url\(#soft\)"/.test(light), "soft glow leaked into the light theme");
+  assert.ok(render("dark").includes('filter="url(#ph)"'), "the dark theme lost its glow");
+});
+
+// Animation is not available: an SVG embedded as an image runs in secure static
+// mode, where declarative animation is disabled. Verified against a browser, and
+// it matches the SVG Integration spec. So an animation here would not degrade,
+// it would simply never run, and anything depending on one would vanish.
+test("nothing here relies on animation, because animation cannot run", () => {
+  for (const t of THEMES) {
+    const svg = render(t);
+    assert.ok(!/<animate|@keyframes|animation:/.test(svg), `${t}: contains an animation that will never run`);
+  }
 });
 
 test("an unmeasured metric never renders as a fake zero", () => {
-  // No trials logged and no usable history: the panel must say so in words rather
-  // than print 0%, which would read as a measured failure instead of no reading.
   const svg = renderHero(stats, { trials: 0, open: 0 }, [], [], "dark");
-  assert.ok(svg.includes("none run yet"), "zero trials did not render as words");
-  assert.ok(svg.includes("suite not run yet"), "absent history did not render as words");
-  assert.ok(!/\b0% self-test coverage/.test(svg), "absent coverage rendered as a fake 0%");
+  assert.ok(svg.includes("no stranger has tried"), "zero trials did not render as words");
+  assert.ok(svg.includes("self-test has not run yet"), "absent history did not render as words");
+  assert.ok(!/0% self-test coverage/.test(svg), "absent coverage rendered as a fake 0%");
 });
 
-// Guards one specific failure: a row stops rendering while the headline keeps
-// counting it, so the panel claims more than it shows. It deliberately does NOT
-// catch a wrong test count in SYSTEMS, because the headline is summed from that
-// same array and the two move together by construction. Verified by injecting
-// both faults: a dropped row goes red here, an edited count does not.
-test("the headline total matches the rows actually rendered", () => {
-  const svg = renderHero(stats, score, entries, history, "dark");
-  const headline = Number(svg.match(/systems shipped · (\d+) tests passing/)?.[1]);
-  const rows = [...svg.matchAll(/>(\d+) tests</g)].reduce((n, m) => n + Number(m[1]), 0);
-  assert.ok(Number.isFinite(headline), "no headline test count found");
-  assert.equal(headline, rows, "the headline total disagrees with the rows it summarises");
+// Guards one failure: a row stops rendering while the summary keeps counting it,
+// so the panel claims more than it shows. It deliberately does NOT catch a wrong
+// number in SYSTEMS, because the summary is summed from that same array and the
+// two move together by construction. Both faults were injected to confirm which
+// one this actually catches.
+test("the summary total matches the rows actually rendered", () => {
+  const svg = render("dark");
+  const headline = Number(svg.match(/·\s*(\d+)\s*passing/)?.[1]);
+  const rows = [...svg.matchAll(/text-anchor="end">(\d+)<\/text>/g)].reduce((n, m) => n + Number(m[1]), 0);
+  assert.ok(Number.isFinite(headline), "no summary total found");
+  assert.equal(headline, rows, "the summary total disagrees with the rows it summarises");
 });
 
-// Regression guard for a bug that was caught in a browser, not in review. A draft
-// revealed each row with a staggered keyframe. GitHub embeds this SVG with <img>,
-// which is secure static mode: the browser painted the animation's first keyframe
-// and never advanced, so every row sat at opacity 0 and the panel rendered as a
-// header and a footer with a hole between them.
-//
-// The invariant that prevents it: nothing carrying information may be animated,
-// and no animation fill mode may strand an element in its starting keyframe. The
-// only animated thing is the decorative sweep, which starts transparent and only
-// ever adds, so a renderer that ignores it loses nothing.
-test("no content depends on an animation running to be visible", () => {
-  const svg = renderHero(stats, score, entries, history, "dark");
-  const raw = svg.match(/<style>[\s\S]*?<\/style>/)?.[0] ?? "";
-  assert.ok(raw, "no stylesheet found");
-  // Strip CSS comments first. The comment above this rule names the very
-  // properties being banned, and matching against it made this assertion fail on
-  // its own documentation.
-  const style = raw.replace(/\/\*[\s\S]*?\*\//g, "");
-
-  assert.ok(
-    !/animation-fill-mode|forwards|backwards/.test(style),
-    "an animation fill mode can strand an element in its first keyframe under <img>",
-  );
-
-  const animated = [...style.matchAll(/^\s*\.([\w-]+)\s*\{[^}]*animation:/gm)].map((m) => m[1]);
-  assert.deepEqual(
-    [...new Set(animated)],
-    ["sweep"],
-    "something other than the decorative sweep is animated",
-  );
-
-  // The sweep must be a plain rect. The moment it decorates a <text>, an
-  // unrendered animation starts hiding words again.
-  const sweepTags = [...svg.matchAll(/<(\w+)[^>]*class="sweep"/g)].map((m) => m[1]);
-  assert.deepEqual([...new Set(sweepTags)], ["rect"], "the sweep is attached to something that carries text");
-  assert.ok(!/class="row"/.test(svg), "rows still carry an animated class");
-});
-
-// Inside SVG a style element is XML, not HTML: its contents are parsed as markup
-// rather than as raw text. A single angle bracket in a CSS comment therefore
-// breaks the whole document, and the browser shows a broken-image icon with no
-// error anywhere. Caught exactly that way, by a rendered page, not by review.
-test("the stylesheet contains no markup that would break XML parsing", () => {
-  for (const theme of ["dark", "light"]) {
-    const svg = renderHero(stats, score, entries, history, theme);
-    const inner = svg.match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? "";
-    assert.ok(inner, `${theme}: no stylesheet found`);
-    assert.ok(!/[<>]/.test(inner), `${theme}: an angle bracket inside <style> will be parsed as XML markup`);
+// Inside SVG a style or text node is XML, not HTML. A stray angle bracket from
+// unescaped data is read as markup and breaks the document, and the browser then
+// shows a broken-image icon with no error anywhere. Caught exactly that way.
+test("no unescaped markup can break XML parsing", () => {
+  const hostile = { ...stats, languages: [{ name: '</text><script>x</script>' }], publicRepos: '"><b>' };
+  for (const t of THEMES) {
+    const svg = renderHero(hostile, score, entries, history, t);
+    assert.ok(!svg.includes("<script>"), `${t}: unescaped markup reached the SVG`);
+    const opens = [...svg.matchAll(/<([a-zA-Z]+)(?:\s[^>]*?)?(\/?)>/g)].filter((m) => !m[2]).length;
+    const closes = [...svg.matchAll(/<\/([a-zA-Z]+)>/g)].length;
+    assert.equal(opens, closes, `${t}: ${opens} opening tags against ${closes} closing tags`);
   }
-});
-
-// Cheap structural well-formedness check without pulling in an XML parser, since
-// this repo ships zero dependencies on purpose. Counts tag openings against
-// closings and self-closings.
-test("every rendered SVG is structurally balanced", () => {
-  for (const theme of ["dark", "light"]) {
-    const svg = renderHero(stats, score, entries, history, theme);
-    const opens = [...svg.matchAll(/<([a-zA-Z]+)(?:\s[^>]*?)?(\/?)>/g)];
-    const closes = [...svg.matchAll(/<\/([a-zA-Z]+)>/g)].map((m) => m[1]);
-    const stack = [];
-    for (const [, tag, selfClose] of opens) if (!selfClose) stack.push(tag);
-    assert.equal(
-      stack.length,
-      closes.length,
-      `${theme}: ${stack.length} opening tags against ${closes.length} closing tags`,
-    );
-  }
-});
-
-test("markup in the corpus cannot break out of the SVG", () => {
-  const hostile = { ...stats, languages: [{ name: '</text><script>x</script>' }] };
-  const svg = renderHero(hostile, score, entries, history, "dark");
-  assert.ok(!svg.includes("<script>"), "unescaped markup reached the SVG");
 });

@@ -1,74 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 364" width="880" height="364" role="img" aria-label="Evaluation report for Tarang Jammalamadaka, verified 2026-08-01. 3 systems shipped and tested, 97 tests passing. ragproof, pass, retrieval + generation eval · NDCG@10 0.72 vs 0.56 BM25. claude-skill-audit, pass, 37 checks across skills, agents, hooks, MCP · 0 deps. starship-flow-control, pass, multi-level BOM constraint model · live demo. the-breaker, in progress, hardware kill-switch · design done, build in progress. this profile, in progress, retrieval harness over data/facts.md · open to public trial, none run yet. 83% self-test coverage (15/18).">
-<style>
-  text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-  /* Nothing that carries information is animated, and nothing depends on an
-     animation running in order to be visible.
-     This was learned the hard way. An earlier draft revealed each row with a
-     staggered keyframe. Loaded as a document it looked right, but GitHub embeds
-     this file as an image, which is secure static mode: the browser applied the
-     animation's starting keyframe and then never advanced it, so every row
-     stayed at opacity 0 and the panel rendered as a header and a footer with a
-     hole between them. A backwards fill mode strands content exactly like a
-     hardcoded zero opacity there.
-     Note also that this comment may not contain an angle bracket: inside SVG a
-     style element is parsed as XML, not as HTML, so a stray tag in here is read
-     as markup and breaks the whole document.
-     So the only animation left is the sweep below, which is purely additive: it
-     starts transparent and adds a moving highlight. If it never runs, nothing is
-     lost, because it never had anything to reveal. */
-  .sweep { opacity: 0; animation: sweep 7s linear infinite; }
-  @keyframes sweep {
-    0%   { opacity: 0; transform: translateX(0); }
-    8%   { opacity: .55; }
-    60%  { opacity: .55; }
-    72%  { opacity: 0; transform: translateX(812px); }
-    100% { opacity: 0; transform: translateX(812px); }
-  }
-  @media (prefers-reduced-motion: reduce) { .sweep { animation: none; } }
-</style>
-  <rect x="0.5" y="0.5" width="879" height="363" rx="10" fill="#121821" stroke="#263041"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 414" width="880" height="414" role="img" aria-label="A terminal running a verification of Tarang Jammalamadaka's projects, 2026-08-01. 3 systems shipped and tested, 97 tests passing. ragproof, ok, NDCG@10 0.72 vs 0.56 BM25 on BEIR/scifact. claude-skill-audit, ok, 37 checks, 6 rule modules, 0 dependencies. starship-flow-control, ok, multi-level BOM constraint model, live demo. the-breaker, in progress, design done, hardware not built yet. this profile, in progress, 83% self-test coverage (15/18). no stranger has tried to break it yet. the invitation is open.">
+<defs>
+  <radialGradient id="vig" cx="0.5" cy="0.42" r="0.78">
+    <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000" stop-opacity="0.75"/>
+  </radialGradient>
+  <filter id="ph" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="2.1" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="0.85" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer>
+  </filter>
+  <pattern id="scan" width="3" height="3" patternUnits="userSpaceOnUse">
+    <rect width="3" height="1.2" fill="#000" opacity="0.34"/>
+  </pattern>
+</defs>
+  <rect width="880" height="414" rx="12" fill="#050A07"/>
 
-  <text x="34" y="48" fill="#8B98A9" font-size="11" letter-spacing="2.6">EVAL REPORT</text>
-  <text x="846" y="48" fill="#8B98A9" font-size="11" text-anchor="end">verified 2026-08-01</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5">
+    <text x="36" y="62" fill="#3FE08A" filter="url(#ph)">tj@bothell</text><text x="128" y="62" fill="#2E6E4E">:~$</text><text x="164" y="62" fill="#D6F5E4" filter="url(#soft)">./verify --all</text>
+    <text x="36" y="92" fill="#2E6E4E">running 5 systems, 97 assertions, every figure checked into something you can run</text>
 
-  <text x="34" y="92" fill="#E6EDF3" font-size="19">3 systems shipped · 97 tests passing</text>
-  <text x="34" y="114" fill="#8B98A9" font-size="12.5">every figure below is checked into something you can run yourself</text>
+  <text x="36" y="126" fill="#3FE08A" filter="url(#ph)"> ok </text>
+  <text x="94" y="126" fill="#D6F5E4">ragproof</text>
+  <text x="304" y="126" fill="#5E8C74">NDCG@10 0.72 vs 0.56 BM25 on BEIR/scifact</text>
+  <text x="844" y="126" fill="#2E6E4E" text-anchor="end">54</text>
+  <text x="36" y="154" fill="#3FE08A" filter="url(#ph)"> ok </text>
+  <text x="94" y="154" fill="#D6F5E4">claude-skill-audit</text>
+  <text x="304" y="154" fill="#5E8C74">37 checks, 6 rule modules, 0 dependencies</text>
+  <text x="844" y="154" fill="#2E6E4E" text-anchor="end">6</text>
+  <text x="36" y="182" fill="#3FE08A" filter="url(#ph)"> ok </text>
+  <text x="94" y="182" fill="#D6F5E4">starship-flow-control</text>
+  <text x="304" y="182" fill="#5E8C74">multi-level BOM constraint model, live demo</text>
+  <text x="844" y="182" fill="#2E6E4E" text-anchor="end">37</text>
+  <text x="36" y="210" fill="#E0A63F" filter="url(#ph)">wip </text>
+  <text x="94" y="210" fill="#D6F5E4">the-breaker</text>
+  <text x="304" y="210" fill="#5E8C74">design done, hardware not built yet</text>
+  <text x="844" y="210" fill="#2E6E4E" text-anchor="end"></text>
+  <text x="36" y="238" fill="#E0A63F" filter="url(#ph)">wip </text>
+  <text x="94" y="238" fill="#D6F5E4">this profile</text>
+  <text x="304" y="238" fill="#5E8C74">83% self-test coverage (15/18)</text>
+  <text x="844" y="238" fill="#2E6E4E" text-anchor="end"></text>
+    <line x1="36" y1="272" x2="844" y2="272" stroke="#2E6E4E" stroke-opacity="0.45"/>
+    <text x="36" y="302" fill="#D6F5E4" font-size="17" filter="url(#soft)">3 shipped · 97 passing · 0 claims without evidence</text>
+    <text x="36" y="326" fill="#5E8C74">no stranger has tried to break it yet. the invitation is open.</text>
+    <text x="36" y="346" fill="#2E6E4E">21 public repos · python · typescript · javascript · c++</text>
+    <text x="36" y="384" fill="#3FE08A" filter="url(#ph)">tj@bothell</text><text x="128" y="384" fill="#2E6E4E">:~$</text>
+    <rect x="166" y="372" width="9" height="16" fill="#3FE08A" filter="url(#ph)"/>
+  </g>
 
-  <line x1="34" y1="136" x2="846" y2="136" stroke="#1E2836"/>
-
-  <g>
-    <text x="34" y="158" fill="#7FD1A8" font-size="11" letter-spacing="1.2">PASS</text>
-    <text x="82" y="158" fill="#E6EDF3" font-size="13.5">ragproof</text>
-    <text x="284" y="158" fill="#8B98A9" font-size="12.5">retrieval + generation eval · NDCG@10 0.72 vs 0.56 BM25</text>
-    <text x="846" y="158" fill="#8B98A9" font-size="12" text-anchor="end">54 tests</text>
-  </g>
-  <g>
-    <text x="34" y="188" fill="#7FD1A8" font-size="11" letter-spacing="1.2">PASS</text>
-    <text x="82" y="188" fill="#E6EDF3" font-size="13.5">claude-skill-audit</text>
-    <text x="284" y="188" fill="#8B98A9" font-size="12.5">37 checks across skills, agents, hooks, MCP · 0 deps</text>
-    <text x="846" y="188" fill="#8B98A9" font-size="12" text-anchor="end">6 tests</text>
-  </g>
-  <g>
-    <text x="34" y="218" fill="#7FD1A8" font-size="11" letter-spacing="1.2">PASS</text>
-    <text x="82" y="218" fill="#E6EDF3" font-size="13.5">starship-flow-control</text>
-    <text x="284" y="218" fill="#8B98A9" font-size="12.5">multi-level BOM constraint model · live demo</text>
-    <text x="846" y="218" fill="#8B98A9" font-size="12" text-anchor="end">37 tests</text>
-  </g>
-  <g>
-    <text x="34" y="248" fill="#F2A65A" font-size="11" letter-spacing="1.2">WIP</text>
-    <text x="82" y="248" fill="#E6EDF3" font-size="13.5">the-breaker</text>
-    <text x="284" y="248" fill="#8B98A9" font-size="12.5">hardware kill-switch · design done, build in progress</text>
-    <text x="846" y="248" fill="#8B98A9" font-size="12" text-anchor="end"></text>
-  </g>
-  <g>
-    <text x="34" y="278" fill="#F2A65A" font-size="11" letter-spacing="1.2">WIP</text>
-    <text x="82" y="278" fill="#E6EDF3" font-size="13.5">this profile</text>
-    <text x="284" y="278" fill="#8B98A9" font-size="12.5">retrieval harness over data/facts.md · open to public trial, none run yet</text>
-    <text x="846" y="278" fill="#8B98A9" font-size="12" text-anchor="end"></text>
-  </g>
-  <rect class="sweep" x="34" y="138" width="2" height="150" fill="#7FD1A8"/>
-  <line x1="34" y1="316" x2="846" y2="316" stroke="#1E2836"/>
-
-  <text x="34" y="338" fill="#8B98A9" font-size="12">21 public repos  ·  Python  ·  TypeScript  ·  JavaScript  ·  C++</text>
-  <text x="846" y="338" fill="#8B98A9" font-size="12" text-anchor="end">83% self-test coverage (15/18)</text>
+  <rect width="880" height="414" fill="url(#scan)"/>
+  <rect width="880" height="414" filter="url(#grain)" opacity="0.5"/>
+  <rect width="880" height="414" rx="12" fill="url(#vig)"/>
 </svg>

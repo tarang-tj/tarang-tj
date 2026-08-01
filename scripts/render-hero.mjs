@@ -1,76 +1,66 @@
-// Draws assets/hero-{dark,light}.svg: the profile rendered as an eval report.
+// Draws assets/hero-{dark,light}.svg: the profile as a terminal running ./verify.
 //
-// The panel is a test-runner summary, not a popularity counter. Rows are systems
-// under test; each carries the evidence behind it and a status mark. Live figures
-// (repo count, suite coverage, public trials) come from the pipeline; the
-// per-system evidence is published fact from each repo, restated here so the panel
-// has something true to show on a day when nobody has run a trial.
+// WHY THIS IS STATIC, AND WHY THAT IS NOT A COMPROMISE
+// Neither CSS @keyframes nor SMIL animates inside an SVG that GitHub embeds with
+// an image tag. Verified directly rather than assumed: a plain HTML div running
+// the same keyframes moved between two screenshots while the identical animation
+// inside an image stayed on frame one, and SMIL did too. Bytes reaching the
+// browser unmodified is not the same as the browser agreeing to run them, and
+// only the second one matters. So every drop of craft here has to come from
+// rendering, not motion.
 //
-// Every row's resting state is its finished state, so a rasterised still frame
-// (GitHub's mobile app, a screenshot, prefers-reduced-motion) is already the
-// complete report rather than a half-drawn one.
+// What DOES survive the image boundary, all confirmed the same way: gradients,
+// feGaussianBlur for phosphor glow, feTurbulence for grain, pattern fills for
+// scanlines, and radial gradients for vignette. That is the whole toolkit, and
+// it is enough to build a CRT.
 //
-// Two themes, because the panel sits on github.com and roughly half of visitors
-// read it in light mode. Rendered as two files and selected with <picture>, which
-// is the only method GitHub documents as reliable.
+// Two themes for one idea. Dark is a green-phosphor terminal. Light is the same
+// readout as a printout: ink on warm paper, texture dialled down, no glow. A
+// terminal that turned into a dark slab on a white page would be worse than
+// having no theme at all.
 
 const W = 880;
-const PAD = 34;
-const ROW_H = 30;
+const PAD = 36;
+const ROW_H = 28;
+const COL_NAME = PAD + 58;
+const COL_EV = PAD + 268;
 
-// PASS means shipped, tested, and publicly verifiable. WIP means real but
-// unfinished, and it stays WIP until it is not. Nothing here is aspirational.
 const PASS = "pass";
 const WIP = "wip";
 
-// Evidence strings are published claims from each repo, restated so the panel can
-// be read without clicking through. Test counts feed the header sum, so a number
-// changed here changes the total: the row and the headline cannot disagree.
+// Published, checkable claims from each repo. Test counts feed the summary line,
+// so a row and the total can never disagree.
 const SYSTEMS = [
-  {
-    name: "ragproof",
-    evidence: "retrieval + generation eval · NDCG@10 0.72 vs 0.56 BM25",
-    tests: 54,
-    status: PASS,
-  },
-  {
-    name: "claude-skill-audit",
-    evidence: "37 checks across skills, agents, hooks, MCP · 0 deps",
-    tests: 6,
-    status: PASS,
-  },
-  {
-    name: "starship-flow-control",
-    evidence: "multi-level BOM constraint model · live demo",
-    tests: 37,
-    status: PASS,
-  },
-  {
-    name: "the-breaker",
-    evidence: "hardware kill-switch · design done, build in progress",
-    tests: 0,
-    status: WIP,
-  },
+  { name: "ragproof", evidence: "NDCG@10 0.72 vs 0.56 BM25 on BEIR/scifact", tests: 54, status: PASS },
+  { name: "claude-skill-audit", evidence: "37 checks, 6 rule modules, 0 dependencies", tests: 6, status: PASS },
+  { name: "starship-flow-control", evidence: "multi-level BOM constraint model, live demo", tests: 37, status: PASS },
+  { name: "the-breaker", evidence: "design done, hardware not built yet", tests: 0, status: WIP },
 ];
 
 const THEMES = {
   dark: {
-    panel: "#121821",
-    border: "#263041",
-    rule: "#1E2836",
-    ink: "#E6EDF3",
-    muted: "#8B98A9",
-    pass: "#7FD1A8",
-    wip: "#F2A65A",
+    bg: "#050A07",
+    dim: "#2E6E4E",
+    mid: "#5E8C74",
+    ink: "#D6F5E4",
+    accent: "#3FE08A",
+    amber: "#E0A63F",
+    glow: true,
+    scanOpacity: 0.34,
+    grainOpacity: 0.5,
+    vignette: 0.75,
   },
   light: {
-    panel: "#FFFFFF",
-    border: "#D8DEE4",
-    rule: "#E7EBEF",
-    ink: "#1F2328",
-    muted: "#5A6472",
-    pass: "#1A7F5A",
-    wip: "#8A5A00",
+    bg: "#FAF8F1",
+    dim: "#8A9184",
+    mid: "#5C6459",
+    ink: "#161A17",
+    accent: "#14764A",
+    amber: "#8A5A00",
+    glow: false,
+    scanOpacity: 0.05,
+    grainOpacity: 0.16,
+    vignette: 0.1,
   },
 };
 
@@ -83,40 +73,33 @@ const esc = (s) =>
 
 const num = (v) => typeof v === "number" && Number.isFinite(v);
 
-// history.json may be absent, empty, half-written or missing fields. Keep only
-// days carrying real counts. Coverage is floored, never rounded: a suite that is
-// 77.9% covered has not covered 78% of anything, and the README floors it too.
-function coverageLabel(history) {
-  if (!Array.isArray(history)) return "suite not run yet";
+// Coverage is floored, never rounded, and matches how the README prints it. A
+// suite 82.9% covered has not covered 83% of anything.
+function coverage(history) {
+  if (!Array.isArray(history)) return null;
   const usable = history.filter((r) => {
     const s = r?.suite;
     return s && num(s.total) && num(s.covered) && s.total > 0;
   });
   const run = usable.at(-1);
-  if (!run) return "suite not run yet";
+  if (!run) return null;
   const { total, covered } = run.suite;
-  return `${Math.floor((covered / total) * 100)}% self-test coverage (${covered}/${total})`;
-}
-
-// No measurement prints as words, never as a fake 0.
-function trialLabel(s) {
-  const n = s?.trials ?? 0;
-  if (!n) return "open to public trial, none run yet";
-  const open = s.open ?? 0;
-  return `${n} public trial${n === 1 ? "" : "s"} · ${open} gap${open === 1 ? "" : "s"} open`;
+  return { pct: Math.floor((covered / total) * 100), covered, total };
 }
 
 export function renderHero(stats, s, entries, history, theme = "dark") {
   const C = THEMES[theme] ?? THEMES.dark;
+  const cov = coverage(history);
 
-  // The harness is the last row, not the headline. It is instrumentation on this
-  // page rather than the achievement, and leading with it made an empty
-  // scoreboard the first thing a visitor read.
+  // The harness is a row, not the headline. Leading with a trial counter meant
+  // leading with a zero, which reads as "nobody came" rather than "open to all".
   const rows = [
     ...SYSTEMS,
     {
       name: "this profile",
-      evidence: `retrieval harness over data/facts.md · ${trialLabel(s)}`,
+      evidence: cov
+        ? `${cov.pct}% self-test coverage (${cov.covered}/${cov.total})`
+        : "self-test has not run yet",
       tests: 0,
       status: WIP,
     },
@@ -125,79 +108,92 @@ export function renderHero(stats, s, entries, history, theme = "dark") {
   const totalTests = rows.reduce((n, r) => n + r.tests, 0);
   const shipped = rows.filter((r) => r.status === PASS).length;
 
-  const headTop = PAD + 46;
-  // The divider is drawn at listTop - 22, so this gap has to clear the subtitle
-  // baseline at headTop + 34 or the rule strikes through the text.
-  const listTop = headTop + 78;
-  const footY = listTop + rows.length * ROW_H + 30;
-  const H = footY + 26;
+  const trials = s?.trials ?? 0;
+  const trialLine = trials
+    ? `${trials} public trial${trials === 1 ? "" : "s"} run, ${s.open ?? 0} gap${(s.open ?? 0) === 1 ? "" : "s"} still open`
+    : "no stranger has tried to break it yet. the invitation is open.";
 
-  const langs = (stats.languages ?? []).map((l) => l.name).join("  ·  ");
-  const coverage = coverageLabel(history);
+  const y0 = PAD + 26;
+  const cmdY = y0;
+  const noteY = y0 + 30;
+  const listTop = noteY + 34;
+  const ruleY = listTop + rows.length * ROW_H + 6;
+  const sumY = ruleY + 30;
+  const subY = sumY + 24;
+  // The machine line gets its own baseline. Sharing one with the trial line put
+  // two left-and-right-anchored strings on a collision course the moment either
+  // grew, and the trial line changes length as soon as someone runs a trial.
+  const machineY = subY + 20;
+  const promptY = machineY + 38;
+  const H = promptY + 30;
+
+  // Glow is expensive per element, so it is spent only where it reads: the
+  // prompt, the status marks and the summary. Body text stays crisp.
+  const g = C.glow ? ' filter="url(#ph)"' : "";
+  const gs = C.glow ? ' filter="url(#soft)"' : "";
 
   const rowSvg = rows
     .map((r, i) => {
       const y = listTop + i * ROW_H;
-      const col = r.status === PASS ? C.pass : C.wip;
-      const mark = r.status === PASS ? "PASS" : "WIP";
-      const right = r.tests ? `${r.tests} tests` : "";
+      const col = r.status === PASS ? C.accent : C.amber;
+      const mark = r.status === PASS ? " ok " : "wip ";
+      const right = r.tests ? String(r.tests) : "";
       return `
-  <g>
-    <text x="${PAD}" y="${y}" fill="${col}" font-size="11" letter-spacing="1.2">${mark}</text>
-    <text x="${PAD + 48}" y="${y}" fill="${C.ink}" font-size="13.5">${esc(r.name)}</text>
-    <text x="${PAD + 250}" y="${y}" fill="${C.muted}" font-size="12.5">${esc(r.evidence)}</text>
-    <text x="${W - PAD}" y="${y}" fill="${C.muted}" font-size="12" text-anchor="end">${esc(right)}</text>
-  </g>`;
+  <text x="${PAD}" y="${y}" fill="${col}"${g}>${mark}</text>
+  <text x="${COL_NAME}" y="${y}" fill="${C.ink}">${esc(r.name)}</text>
+  <text x="${COL_EV}" y="${y}" fill="${C.mid}">${esc(r.evidence)}</text>
+  <text x="${W - PAD}" y="${y}" fill="${C.dim}" text-anchor="end">${esc(right)}</text>`;
     })
     .join("");
 
-  const ariaRows = rows
-    .map((r) => `${r.name}, ${r.status === PASS ? "pass" : "in progress"}, ${r.evidence}`)
-    .join(". ");
+  const aria = `${shipped} systems shipped and tested, ${totalTests} tests passing. ${rows
+    .map((r) => `${r.name}, ${r.status === PASS ? "ok" : "in progress"}, ${r.evidence}`)
+    .join(". ")}. ${trialLine}`;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Evaluation report for Tarang Jammalamadaka, verified ${esc(stats.verifiedAt)}. ${shipped} systems shipped and tested, ${totalTests} tests passing. ${esc(ariaRows)}. ${esc(coverage)}.">
-<style>
-  text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-  /* Nothing that carries information is animated, and nothing depends on an
-     animation running in order to be visible.
-     This was learned the hard way. An earlier draft revealed each row with a
-     staggered keyframe. Loaded as a document it looked right, but GitHub embeds
-     this file as an image, which is secure static mode: the browser applied the
-     animation's starting keyframe and then never advanced it, so every row
-     stayed at opacity 0 and the panel rendered as a header and a footer with a
-     hole between them. A backwards fill mode strands content exactly like a
-     hardcoded zero opacity there.
-     Note also that this comment may not contain an angle bracket: inside SVG a
-     style element is parsed as XML, not as HTML, so a stray tag in here is read
-     as markup and breaks the whole document.
-     So the only animation left is the sweep below, which is purely additive: it
-     starts transparent and adds a moving highlight. If it never runs, nothing is
-     lost, because it never had anything to reveal. */
-  .sweep { opacity: 0; animation: sweep 7s linear infinite; }
-  @keyframes sweep {
-    0%   { opacity: 0; transform: translateX(0); }
-    8%   { opacity: .55; }
-    60%  { opacity: .55; }
-    72%  { opacity: 0; transform: translateX(${W - PAD * 2}px); }
-    100% { opacity: 0; transform: translateX(${W - PAD * 2}px); }
-  }
-  @media (prefers-reduced-motion: reduce) { .sweep { animation: none; } }
-</style>
-  <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="10" fill="${C.panel}" stroke="${C.border}"/>
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="A terminal running a verification of Tarang Jammalamadaka's projects, ${esc(
+    stats.verifiedAt,
+  )}. ${esc(aria)}">
+<defs>
+  <radialGradient id="vig" cx="0.5" cy="0.42" r="0.78">
+    <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000" stop-opacity="${C.vignette}"/>
+  </radialGradient>
+  <filter id="ph" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="2.1" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="0.85" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer>
+  </filter>
+  <pattern id="scan" width="3" height="3" patternUnits="userSpaceOnUse">
+    <rect width="3" height="1.2" fill="#000" opacity="${C.scanOpacity}"/>
+  </pattern>
+</defs>
+  <rect width="${W}" height="${H}" rx="12" fill="${C.bg}"/>
 
-  <text x="${PAD}" y="${PAD + 14}" fill="${C.muted}" font-size="11" letter-spacing="2.6">EVAL REPORT</text>
-  <text x="${W - PAD}" y="${PAD + 14}" fill="${C.muted}" font-size="11" text-anchor="end">verified ${esc(stats.verifiedAt)}</text>
-
-  <text x="${PAD}" y="${headTop + 12}" fill="${C.ink}" font-size="19">${shipped} systems shipped · ${totalTests} tests passing</text>
-  <text x="${PAD}" y="${headTop + 34}" fill="${C.muted}" font-size="12.5">every figure below is checked into something you can run yourself</text>
-
-  <line x1="${PAD}" y1="${listTop - 22}" x2="${W - PAD}" y2="${listTop - 22}" stroke="${C.rule}"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5">
+    <text x="${PAD}" y="${cmdY}" fill="${C.accent}"${g}>tj@bothell</text><text x="${PAD + 92}" y="${cmdY}" fill="${C.dim}">:~$</text><text x="${PAD + 128}" y="${cmdY}" fill="${C.ink}"${gs}>./verify --all</text>
+    <text x="${PAD}" y="${noteY}" fill="${C.dim}">running ${rows.length} systems, ${totalTests} assertions, every figure checked into something you can run</text>
 ${rowSvg}
-  <rect class="sweep" x="${PAD}" y="${listTop - 20}" width="2" height="${rows.length * ROW_H}" fill="${C.pass}"/>
-  <line x1="${PAD}" y1="${footY - 22}" x2="${W - PAD}" y2="${footY - 22}" stroke="${C.rule}"/>
+    <line x1="${PAD}" y1="${ruleY}" x2="${W - PAD}" y2="${ruleY}" stroke="${C.dim}" stroke-opacity="0.45"/>
+    <text x="${PAD}" y="${sumY}" fill="${C.ink}" font-size="17"${gs}>${shipped} shipped · ${totalTests} passing · 0 claims without evidence</text>
+    <text x="${PAD}" y="${subY}" fill="${C.mid}">${esc(trialLine)}</text>
+    <text x="${PAD}" y="${machineY}" fill="${C.dim}">${esc(stats.publicRepos)} public repos · ${esc(
+      (stats.languages ?? []).map((l) => l.name.toLowerCase()).join(" · "),
+    )}</text>
+    <text x="${PAD}" y="${promptY}" fill="${C.accent}"${g}>tj@bothell</text><text x="${PAD + 92}" y="${promptY}" fill="${C.dim}">:~$</text>
+    <rect x="${PAD + 130}" y="${promptY - 12}" width="9" height="16" fill="${C.accent}"${g}/>
+  </g>
 
-  <text x="${PAD}" y="${footY}" fill="${C.muted}" font-size="12">${esc(stats.publicRepos)} public repos  ·  ${esc(langs)}</text>
-  <text x="${W - PAD}" y="${footY}" fill="${C.muted}" font-size="12" text-anchor="end">${esc(coverage)}</text>
+  <rect width="${W}" height="${H}" fill="url(#scan)"/>
+  <rect width="${W}" height="${H}" filter="url(#grain)" opacity="${C.grainOpacity}"/>
+  <rect width="${W}" height="${H}" rx="12" fill="url(#vig)"/>
 </svg>
 `;
 }
