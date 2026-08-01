@@ -33,7 +33,11 @@ const WIP = "wip";
 const SYSTEMS = [
   { name: "ragproof", evidence: "NDCG@10 0.72 vs 0.56 BM25 on BEIR/scifact", tests: 54, status: PASS },
   { name: "claude-skill-audit", evidence: "37 checks, 6 rule modules, 0 dependencies", tests: 6, status: PASS },
-  { name: "starship-flow-control", evidence: "multi-level BOM constraint model, live demo", tests: 37, status: PASS },
+  // 20, not 37. The 37 belongs to a WebGL "wave 2" that was verified locally and
+  // never pushed, so it is not in the public repo and cannot be claimed here.
+  // Counted from a fresh clone of the public remote: 14 node test() calls plus
+  // 6 fault-oriented python tests.
+  { name: "starship-flow-control", evidence: "multi-level BOM constraint model, live demo", tests: 20, status: PASS },
   { name: "the-breaker", evidence: "design done, hardware not built yet", tests: 0, status: WIP },
 ];
 

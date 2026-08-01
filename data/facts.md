@@ -51,7 +51,10 @@ target and it walks the BOM, finds the binding constraint, and shows what actual
 gates completion rather than what merely looks late. Baseline, expedite and
 switched-constraint scenarios recompute live. Built on synthetic data to learn the
 planning model end to end, not as a claim about any company's operations. Vanilla
-JavaScript and WebGL2, 37 tests, no build step.
+JavaScript on a 2D canvas, no build step. The deterministic engine fails loud on unknown
+references and cycles. The public repo carries 20 tests: 14 browser-contract tests and 6
+fault-oriented tests on the engine. A WebGL version was built and verified locally but was
+never pushed, so it is NOT part of the public project and must not be described as shipped.
 Live: tarang-tj.github.io/starship-flow-control/
 
 ## Data and analytics work

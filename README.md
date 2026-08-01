@@ -6,7 +6,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/hero-light.svg">
-  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 15/18 covered, 83% on its own self-test suite. Verified 2026-08-01.">
+  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-08-01.">
 </picture>
 
 hi, i'm tj. i build applied AI systems, and i build the harnesses that check whether they're telling the truth.
@@ -21,7 +21,7 @@ spent summer 2026 on applied AI at The Coca-Cola Company, Ignite Program, Atlant
 | --- | --- | --- |
 | **[ragproof](https://github.com/tarang-tj/ragproof)** | RAG evaluation harness. scores retrieval and generation together, because a perfect retriever still fails if the model ignores the context. | 54 tests, CI green. on BEIR/scifact a dense retriever hit NDCG@10 0.72 against 0.56 for BM25. |
 | **[claude-skill-audit](https://github.com/tarang-tj/claude-skill-audit)** | security scanner for a whole Claude Code and MCP setup: skills, agents, hooks, permissions. | 37 checks across 6 rule modules, zero runtime dependencies, and a cross-artifact escalation-chain detector nothing else covers. |
-| **[starship-flow-control](https://tarang-tj.github.io/starship-flow-control/)** | constraint model over a multi-level bill of materials. finds what actually gates a build instead of what merely looks late. | 37 tests. live demo on synthetic data, no build step. |
+| **[starship-flow-control](https://tarang-tj.github.io/starship-flow-control/)** | constraint model over a multi-level bill of materials. finds what actually gates a build instead of what merely looks late. | deterministic engine, fail-loud on unknown references and cycles. 20 tests. live demo on synthetic data, no build step. |
 | **[the-breaker](https://github.com/tarang-tj/the-breaker)** | hardware kill-switch for an agent fleet. a guarded switch gates every agent behind a token that expires in seconds, so switch off, dead process and dropped network all fail to HALT. | design complete and open sourced. **the hardware is not built yet** — read it as a design, not a running system. |
 | **SyllabusAI** | turns a course syllabus into calendar events in one step. Claude API, Node, Supabase, Google Calendar OAuth. | private repo, and the hosted demo is down while i sort out billing. no link beats a dead one. |
 
@@ -32,9 +32,8 @@ spent summer 2026 on applied AI at The Coca-Cola Company, Ignite Program, Atlant
 
 a model card lists what its subject cannot do. so does this one.
 
-the profile runs a daily self-test: **15/18 covered, 83%**. the questions it currently cannot answer from its own facts file:
+the profile runs a daily self-test: **16/18 covered, 88%**. the questions it currently cannot answer from its own facts file:
 
-- What is a project that failed, and what did you take away from it?
 - Which programming paradigm do you dislike most, and defend that opinion?
 - Who could give a reference for your teamwork?
 
