@@ -117,8 +117,8 @@
     "date": "2026-08-01",
     "suite": {
       "total": 18,
-      "covered": 14,
-      "coverage": 0.78
+      "covered": 15,
+      "coverage": 0.83
     },
     "trials": {
       "total": 0,
@@ -127,7 +127,6 @@
     },
     "uncovered": [
       "What is a project that failed, and what did you take away from it?",
-      "What compensation are you expecting for a full time offer?",
       "Which programming paradigm do you dislike most, and defend that opinion?",
       "Who could give a reference for your teamwork?"
     ]

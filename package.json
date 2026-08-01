@@ -5,6 +5,7 @@
   "description": "Self-building GitHub profile: daily-regenerated verification panel and a grounded AMA agent.",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "build:cached": "node scripts/build.mjs --no-fetch"
+    "build:cached": "node scripts/build.mjs --no-fetch",
+    "test": "node --test scripts/build.test.mjs"
   }
 }

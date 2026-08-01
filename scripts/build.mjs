@@ -1,6 +1,6 @@
 // Rebuilds README.md and assets/hero.svg from README.tmpl.md, live GitHub data,
 // and the eval log. Run: node scripts/build.mjs   (--no-fetch uses cached stats)
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { collectStats } from "./collect-stats.mjs";
 import { renderHero } from "./render-hero.mjs";
 import { parseSections } from "./lib/retrieve.mjs";
@@ -119,7 +119,19 @@ export async function buildAll(stats) {
     readJson(HISTORY_PATH, []),
   ]);
   const s = score(entries, parseSections(factsRaw));
-  await writeFile("assets/hero.svg", renderHero(stats, s, entries, Array.isArray(history) ? history : []));
+  const hist = Array.isArray(history) ? history : [];
+  // Two files, one per theme, selected by <picture> in the template. GitHub
+  // documents that as the only reliable way to respond to the reader's colour
+  // scheme; a single SVG carrying its own prefers-color-scheme media query is
+  // not guaranteed to survive the image proxy.
+  // git does not track empty directories, so a fresh checkout of this repo has no
+  // assets/ until something writes into it. Without this the Action fails on a
+  // clean runner with ENOENT while working fine on any machine that has built before.
+  await mkdir("assets", { recursive: true });
+  await Promise.all([
+    writeFile("assets/hero-dark.svg", renderHero(stats, s, entries, hist, "dark")),
+    writeFile("assets/hero-light.svg", renderHero(stats, s, entries, hist, "light")),
+  ]);
   await writeFile("README.md", await renderReadme(stats));
   return s;
 }
