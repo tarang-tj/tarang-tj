@@ -129,5 +129,22 @@
       "Which programming paradigm do you dislike most, and defend that opinion?",
       "Who could give a reference for your teamwork?"
     ]
+  },
+  {
+    "date": "2026-08-02",
+    "suite": {
+      "total": 18,
+      "covered": 16,
+      "coverage": 0.89
+    },
+    "trials": {
+      "total": 0,
+      "held": 0,
+      "breaks": 0
+    },
+    "uncovered": [
+      "Which programming paradigm do you dislike most, and defend that opinion?",
+      "Who could give a reference for your teamwork?"
+    ]
   }
 ]
