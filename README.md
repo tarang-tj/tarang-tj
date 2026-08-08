@@ -6,7 +6,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/hero-light.svg">
-  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-08-07.">
+  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-08-08.">
 </picture>
 
 hi, i'm tj. i build applied AI systems, and i build the harnesses that check whether they're telling the truth.
@@ -144,6 +144,6 @@ honest, not automatic.
 
 ---
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 22 public repos · 9 stars · Python · TypeScript · JavaScript · C++
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 24 public repos · 9 stars · Python · TypeScript · JavaScript · C++
 
 open to applied AI and forward deployed engineering roles starting June 2027.
