@@ -147,8 +147,3 @@ honest, not automatic.
 [portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 28 public repos · 9 stars · Python · TypeScript · JavaScript · C++
 
 open to applied AI and forward deployed engineering roles starting June 2027.
-
-
-
-## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Structure
-[![Structure](https://images.repography.com/154865341/tarang-tj/tarang-tj/structure/9JMtOqMp1B5sBdwxhDnQpgZByj54qqUiyy6VMw2FOqE/zggdgAUdcuOBNDWT8VK1sGaQDHWzlRZNOkfJbhD2aqc_table.svg)](https://github.com/tarang-tj/tarang-tj)
