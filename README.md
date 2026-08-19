@@ -1,6 +1,8 @@
 
+
 ## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Structure
-[![Structure](https://images.repography.com/154865341/tarang-tj/tarang-tj/structure/9JMtOqMp1B5sBdwxhDnQpgZByj54qqUiyy6VMw2FOqE/AHToeGGaPXHupkDEoyJJTtjvrblo4zqBCovIYHp3xJQ_table.svg)](https://github.com/tarang-tj/tarang-tj)
+[![Structure](https://images.repography.com/154865341/tarang-tj/tarang-tj/structure/9JMtOqMp1B5sBdwxhDnQpgZByj54qqUiyy6VMw2FOqE/zggdgAUdcuOBNDWT8VK1sGaQDHWzlRZNOkfJbhD2aqc_table.svg)](https://github.com/tarang-tj/tarang-tj)
+
 
 <!--
   README.md is generated from this file. Edit README.tmpl.md, not README.md.
