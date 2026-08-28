@@ -1,12 +1,12 @@
 {
   "login": "tarang-tj",
-  "publicRepos": 28,
+  "publicRepos": 29,
   "stars": 9,
   "followers": 7,
   "languages": [
     {
       "name": "Python",
-      "count": 10
+      "count": 11
     },
     {
       "name": "TypeScript",
@@ -21,6 +21,6 @@
       "count": 1
     }
   ],
-  "lastPush": "2026-08-26T07:11:41Z",
-  "verifiedAt": "2026-08-27"
+  "lastPush": "2026-08-28T05:54:40Z",
+  "verifiedAt": "2026-08-28"
 }
