@@ -6,7 +6,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/hero-light.svg">
-  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-09-03.">
+  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-09-04.">
 </picture>
 
 hi, i'm tj. i build applied AI systems, and i build the harnesses that check whether they're telling the truth.
