@@ -34,7 +34,8 @@ The repo is private.
 ## tycho
 
 A browser rover teleoperation simulator on real NASA/USGS elevation data for 7 Moon
-and Mars sites, with the real signal delay. A Monte Carlo dry run scores Mars plans.
+and Mars sites. Moon levels use the real one-way signal delay; the Mars delay is
+compressed and labeled. A Monte Carlo dry run scores Mars plans.
 Live at tarang-tj.github.io/tycho. Repo: github.com/tarang-tj/tycho
 
 ## AutoAppli
