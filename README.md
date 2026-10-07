@@ -148,6 +148,6 @@ honest, not automatic.
 
 ---
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 30 public repos · 10 stars · Python · JavaScript · TypeScript · C++
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 32 public repos · 10 stars · Python · TypeScript · JavaScript · C++
 
 open to applied AI and forward deployed engineering roles starting June 2027.
