@@ -28,6 +28,31 @@ right now. Repo: github.com/tarang-tj/ragproof
 
 Turns a course syllabus into a calendar you can import into Apple or Google
 Calendar, in one step.
+A free ed-tech tool that TJ built and runs; it is not sold. Live at syllabusai.net.
+The repo is private.
+
+## tycho
+
+A browser rover teleoperation simulator on real NASA/USGS elevation data for 7 Moon
+and Mars sites, with the real signal delay. A Monte Carlo dry run scores Mars plans.
+Live at tarang-tj.github.io/tycho. Repo: github.com/tarang-tj/tycho
+
+## AutoAppli
+
+A job-search workspace: a kanban board with pipeline-health widgets, a match scorer
+that explains each score per dimension, and ingestion across 11 ATS sources and 357
+live-validated boards. Next.js, FastAPI, Supabase, Claude API. Live at autoappli.com.
+
+## Open source contributions
+
+TJ has 10 pull requests merged into career-ops-hq/career-ops (August to September
+2026): tracker, dashboard, updater and agent-inbox fixes, a setup quick start, and a
+user-layer test. One pull request is open against NVIDIA/SkillSpector (#455).
+
+## Competitions
+
+Kaggle Pokemon TCG AI Battle Challenge: 245th of 6,807 teams. HackerRank Orchestrate:
+14th of 1,983. Neither leaderboard has a public link.
 
 ## claude-skill-audit
 
