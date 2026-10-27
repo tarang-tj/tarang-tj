@@ -31,14 +31,17 @@ const WIP = "wip";
 // Published, checkable claims from each repo. Test counts feed the summary line,
 // so a row and the total can never disagree.
 const SYSTEMS = [
-  { name: "ragproof", evidence: "NDCG@10 0.72 vs 0.56 BM25 on BEIR/scifact", tests: 54, status: PASS },
-  { name: "claude-skill-audit", evidence: "37 checks, 6 rule modules, 0 dependencies", tests: 6, status: PASS },
+  // Counted 2026-10-27 from the public remotes: `def test_` functions under tests/.
+  // (p2p-match-audit's own README says 23; the code has 24, and the code wins.)
+  { name: "aero-supplier-spend", evidence: "$600.9B DoD + NASA spend, reconciled to the cent", tests: 39, status: PASS },
+  { name: "p2p-match-audit", evidence: "3-way match on a real ERP log, 14 controls", tests: 24, status: PASS },
   // 20, not 37. The 37 belongs to a WebGL "wave 2" that was verified locally and
   // never pushed, so it is not in the public repo and cannot be claimed here.
   // Counted from a fresh clone of the public remote: 14 node test() calls plus
   // 6 fault-oriented python tests.
   { name: "starship-flow-control", evidence: "multi-level BOM constraint model, live demo", tests: 20, status: PASS },
-  { name: "the-breaker", evidence: "design done, hardware not built yet", tests: 0, status: WIP },
+  { name: "ragproof", evidence: "NDCG@10 0.72 vs 0.56 BM25 on BEIR/scifact", tests: 54, status: PASS },
+  { name: "claude-skill-audit", evidence: "37 checks, 6 rule modules, 0 dependencies", tests: 6, status: PASS },
 ];
 
 const THEMES = {
