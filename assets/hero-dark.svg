@@ -54,7 +54,7 @@
     <line x1="36" y1="300" x2="844" y2="300" stroke="#2E6E4E" stroke-opacity="0.45"/>
     <text x="36" y="330" fill="#D6F5E4" font-size="17" filter="url(#soft)">5 shipped · 143 passing · 0 claims without evidence</text>
     <text x="36" y="354" fill="#5E8C74">no stranger has tried to break it yet. the invitation is open.</text>
-    <text x="36" y="374" fill="#2E6E4E">38 public repos · python · javascript · typescript · c++</text>
+    <text x="36" y="374" fill="#2E6E4E">35 public repos · python · javascript · typescript · c++</text>
     <text x="36" y="412" fill="#3FE08A" filter="url(#ph)">tj@bothell</text><text x="128" y="412" fill="#2E6E4E">:~$</text>
     <rect x="166" y="400" width="9" height="16" fill="#3FE08A" filter="url(#ph)"/>
   </g>

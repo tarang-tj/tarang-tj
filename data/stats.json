@@ -1,6 +1,6 @@
 {
   "login": "tarang-tj",
-  "publicRepos": 38,
+  "publicRepos": 35,
   "stars": 10,
   "followers": 10,
   "languages": [
@@ -10,17 +10,17 @@
     },
     {
       "name": "JavaScript",
-      "count": 7
+      "count": 6
     },
     {
       "name": "TypeScript",
-      "count": 7
+      "count": 5
     },
     {
       "name": "C++",
       "count": 1
     }
   ],
-  "lastPush": "2026-10-27T09:00:02Z",
+  "lastPush": "2026-10-27T09:06:23Z",
   "verifiedAt": "2026-10-27"
 }

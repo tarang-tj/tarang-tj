@@ -150,6 +150,6 @@ honest, not automatic.
 
 ---
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 38 public repos · 10 stars · Python · JavaScript · TypeScript · C++
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 35 public repos · 10 stars · Python · JavaScript · TypeScript · C++
 
 open to aerospace roles in program, data, supply chain and applied AI, starting June 2027.
