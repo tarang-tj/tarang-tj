@@ -9,7 +9,7 @@
   <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. {{SUITE}} on its own self-test suite. Verified {{VERIFIED}}.">
 </picture>
 
-hi, i'm tj. i build applied AI systems, and i build the harnesses that check whether they're telling the truth.
+hi, i'm tj. i work on aerospace and supply-chain data, and i build the AI systems and harnesses that check whether the numbers are telling the truth.
 
 language models are good at language and unreliable at arithmetic. so i put the math in code, the judgement in the model, and a test between them. this page works the same way: every claim has its evidence attached, including the ones that fail.
 
@@ -19,15 +19,17 @@ spent summer 2026 on applied AI at The Coca-Cola Company, Ignite Program, Atlant
 
 | | what it is | evidence |
 | --- | --- | --- |
+| **[aero-supplier-spend](https://tarang-tj.github.io/aero-supplier-spend/)** | who gets paid to build U.S. military and NASA aerospace, on what contract terms, and how much of it is competed. 874,769 real contract transactions, FY2021 to FY2025. | $600.9B reconciled to USAspending's own totals to the cent. rolled up to parent companies, the top five DoD aerospace suppliers hold 82%. a gate re-runs the reconcile and a browser check. |
+| **[p2p-match-audit](https://tarang-tj.github.io/p2p-match-audit/)** | three-way match audit (purchase order, goods receipt, invoice) on a real ERP purchase-to-pay log: 251,734 order items and 1.6M events from the BPI Challenge 2019. | fourteen controls. nine planted bugs each turn the test suite red, and every number in the findings memo traces to a generated summary file. |
+| **[starship-flow-control](https://tarang-tj.github.io/starship-flow-control/)** | constraint model over a multi-level bill of materials. finds what actually gates a build instead of what merely looks late. | deterministic engine, fail-loud on unknown references and cycles. 20 tests. live demo on synthetic data, no build step. |
+| **[tycho](https://tarang-tj.github.io/tycho/)** | browser rover teleoperation simulator on real NASA/USGS elevation data for 7 Moon and Mars sites. Moon levels use the real one-way signal delay; the Mars delay is compressed and labeled. | live demo. a Monte Carlo dry run scores Mars plans before you drive them. |
 | **[ragproof](https://github.com/tarang-tj/ragproof)** | RAG evaluation harness. scores retrieval and generation together, because a perfect retriever still fails if the model ignores the context. | 54 tests, CI green. on BEIR/scifact a dense retriever hit NDCG@10 0.72 against 0.56 for BM25. |
 | **[claude-skill-audit](https://github.com/tarang-tj/claude-skill-audit)** | security scanner for a whole Claude Code and MCP setup: skills, agents, hooks, permissions. | 37 checks across 6 rule modules, zero runtime dependencies, and a cross-artifact escalation-chain detector nothing else covers. |
-| **[starship-flow-control](https://tarang-tj.github.io/starship-flow-control/)** | constraint model over a multi-level bill of materials. finds what actually gates a build instead of what merely looks late. | deterministic engine, fail-loud on unknown references and cycles. 20 tests. live demo on synthetic data, no build step. |
 | **[the-breaker](https://github.com/tarang-tj/the-breaker)** | hardware kill-switch for an agent fleet. a guarded switch gates every agent behind a token that expires in seconds, so switch off, dead process and dropped network all fail to HALT. | design complete and open sourced. **the hardware is not built yet** — read it as a design, not a running system. |
-| **[SyllabusAI](https://syllabusai.net)** | turns a course syllabus into calendar events in one step, plus a study companion. a free ed-tech tool i built and run. Claude API, Node, Supabase, Google Calendar OAuth. | live at syllabusai.net and free to use. the repo is private. |
-| **[tycho](https://tarang-tj.github.io/tycho/)** | browser rover teleoperation simulator on real NASA/USGS elevation data for 7 Moon and Mars sites. Moon levels use the real one-way signal delay; the Mars delay is compressed and labeled. | live demo. a Monte Carlo dry run scores Mars plans before you drive them. |
+| **[SyllabusAI](https://syllabusai.net)** | turns a course syllabus into calendar events in one step, plus a study companion. a free ed-tech tool i built and shipped. Claude API, Node, Supabase, Google Calendar OAuth. | past project, shipped at syllabusai.net. the repo is private. |
 | **[AutoAppli](https://autoappli.com)** | job-search workspace: kanban with pipeline-health widgets and a match scorer that explains each score per dimension. Next.js, FastAPI, Supabase, Claude API. | live. ingestion across 11 ATS sources and 357 live-validated boards. |
 
-**outside this account.** 10 pull requests merged into [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops/pulls?q=is%3Apr+author%3Atarang-tj+is%3Amerged), aug to sep 2026, and one open against [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector/pull/455). two competition results with no public link, so read them as stated, not shown: 245th of 6,807 in the Kaggle Pokemon TCG AI Battle Challenge, and #14 of 1,983 in HackerRank Orchestrate.
+**outside this account.** 10 pull requests merged into [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops/pulls?q=is%3Apr+author%3Atarang-tj+is%3Amerged), aug to sep 2026, and open ones against [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector/pull/455) and [NVIDIA/cosmos-framework](https://github.com/NVIDIA/cosmos-framework/pull/317). two competition results with no public link, so read them as stated, not shown: 245th of 6,807 in the Kaggle Pokemon TCG AI Battle Challenge, and #14 of 1,983 in HackerRank Orchestrate.
 
 <details>
 <summary><code>tj@bothell:~$ ./limitations</code></summary>
@@ -149,4 +151,4 @@ honest, not automatic.
 
 [portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · {{REPOS}} public repos · {{STARS}} stars · {{LANGS}}
 
-open to applied AI and forward deployed engineering roles starting June 2027.
+open to aerospace roles in program, data, supply chain and applied AI, starting June 2027.

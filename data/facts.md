@@ -9,27 +9,43 @@ edit this file to change what it can answer.
 
 ## Who TJ is
 
-Tarang "TJ" Jammalamadaka. Applied AI engineer. Spent summer 2026 working on applied
+Tarang "TJ" Jammalamadaka. Works on aerospace and supply-chain data and applied AI. Spent summer 2026 working on applied
 AI at The Coca-Cola Company, Ignite Program, in Atlanta; that internship has ended.
-Studying MIS at UW Bothell, class of 2027. Open to applied AI and forward deployed
-engineering roles starting June 2027.
+Studying MIS at UW Bothell, class of 2027. Open to aerospace roles in program,
+data, supply chain and applied AI, starting June 2027.
 
 The through line in his work: language models are good at language and unreliable at
 arithmetic, so he puts the math in code, the judgement in the model, and a test
 between them.
 
+## aero-supplier-spend
+
+Who gets paid to build U.S. military and NASA aerospace, on what contract terms, and
+how much of it is competed. 874,769 real contract transactions from USAspending,
+FY2021 to FY2025, $600.9B, reconciled to USAspending's own totals to the cent.
+Rolled up to parent companies, Lockheed Martin holds 43% of DoD aerospace obligations
+and the top five hold 82%. 87% of DoD aerospace dollars are not competed.
+Live at tarang-tj.github.io/aero-supplier-spend. Repo: github.com/tarang-tj/aero-supplier-spend
+
+## p2p-match-audit
+
+A three-way match audit (purchase order, goods receipt, invoice) of a real ERP
+purchase-to-pay log: 251,734 purchase-order items and 1,595,923 events from the BPI
+Challenge 2019. Fourteen controls across conformance, purchasing discipline, rework
+and segregation of duties. Nine planted bugs each turn its test suite red.
+Live at tarang-tj.github.io/p2p-match-audit. Repo: github.com/tarang-tj/p2p-match-audit
+
 ## ragproof
 
 An open source RAG evaluation harness: retrieval metrics, answer faithfulness, and
-drift detection, benchmarked on BEIR. Python. This is the main thing TJ is building
-right now. Repo: github.com/tarang-tj/ragproof
+drift detection, benchmarked on BEIR. Python. Repo: github.com/tarang-tj/ragproof
 
 ## SyllabusAI
 
 Turns a course syllabus into a calendar you can import into Apple or Google
 Calendar, in one step.
-A free ed-tech tool that TJ built and runs; it is not sold. Live at syllabusai.net.
-The repo is private.
+A free ed-tech tool that TJ built and shipped; it is not sold. It is a past project,
+shipped at syllabusai.net. The repo is private.
 
 ## tycho
 
@@ -48,7 +64,8 @@ live-validated boards. Next.js, FastAPI, Supabase, Claude API. Live at autoappli
 
 TJ has 10 pull requests merged into career-ops-hq/career-ops (August to September
 2026): tracker, dashboard, updater and agent-inbox fixes, a setup quick start, and a
-user-layer test. One pull request is open against NVIDIA/SkillSpector (#455).
+user-layer test. Pull requests are open against NVIDIA/SkillSpector (#455) and
+NVIDIA/cosmos-framework (#317, a PAI-Bench-C shard-count fix).
 
 ## Competitions
 
