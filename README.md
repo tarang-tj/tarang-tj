@@ -6,7 +6,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/hero-light.svg">
-  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-10-26.">
+  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-10-27.">
 </picture>
 
 hi, i'm tj. i work on aerospace and supply-chain data, and i build the AI systems and harnesses that check whether the numbers are telling the truth.
@@ -150,6 +150,6 @@ honest, not automatic.
 
 ---
 
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 36 public repos · 10 stars · Python · JavaScript · TypeScript · C++
+[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 38 public repos · 10 stars · Python · JavaScript · TypeScript · C++
 
 open to aerospace roles in program, data, supply chain and applied AI, starting June 2027.
