@@ -2,10 +2,11 @@
   "name": "tarang-tj-profile",
   "private": true,
   "type": "module",
-  "description": "Self-building GitHub profile: daily-regenerated verification panel and a grounded AMA agent.",
+  "description": "Self-building GitHub profile: an animated lane board whose numbers are checked against each repo daily.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:cached": "node scripts/build.mjs --no-fetch",
-    "test": "node --test scripts/build.test.mjs"
+    "test": "node --test scripts/build.test.mjs",
+    "verify": "node scripts/verify-board.mjs"
   }
 }

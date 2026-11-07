@@ -2,7 +2,7 @@
 // and the eval log. Run: node scripts/build.mjs   (--no-fetch uses cached stats)
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { collectStats } from "./collect-stats.mjs";
-import { renderHero } from "./render-hero.mjs";
+import { renderBoardFiles, renderBoardMarkdown } from "./render-board.mjs";
 import { parseSections } from "./lib/retrieve.mjs";
 import { score, openBreaks, scorers } from "./lib/eval-log.mjs";
 
@@ -10,6 +10,7 @@ const STATS_PATH = "data/stats.json";
 const EVAL_PATH = "data/eval.json";
 const FACTS_PATH = "data/facts.md";
 const HISTORY_PATH = "data/history.json";
+const BOARD_PATH = "data/board.json";
 
 async function readJson(path, fallback) {
   try {
@@ -78,11 +79,12 @@ function scorersList(top) {
 }
 
 export async function renderReadme(stats) {
-  const [template, entries, factsRaw, history] = await Promise.all([
+  const [template, entries, factsRaw, history, board] = await Promise.all([
     readFile("README.tmpl.md", "utf8"),
     readJson(EVAL_PATH, []),
     readFile(FACTS_PATH, "utf8"),
     readJson(HISTORY_PATH, []),
+    readFile(BOARD_PATH, "utf8").then(JSON.parse),
   ]);
   const sections = parseSections(factsRaw);
   const s = score(entries, sections);
@@ -105,33 +107,23 @@ export async function renderReadme(stats) {
     SCORERS: scorersList(scorers(entries)),
     SUITE: suiteFigure(run),
     UNCOVERED: uncoveredList(run),
+    BOARD: renderBoardMarkdown(board),
   };
   return template.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in tokens ? tokens[k] : m));
 }
 
 export async function buildAll(stats) {
-  // history feeds the coverage trace on the panel. readJson swallows a missing or
-  // malformed file, and renderHero drops any record without usable counts, so the
-  // worst case is the empty-state panel rather than a failed build.
-  const [entries, factsRaw, history] = await Promise.all([
+  const [entries, factsRaw, board] = await Promise.all([
     readJson(EVAL_PATH, []),
     readFile(FACTS_PATH, "utf8"),
-    readJson(HISTORY_PATH, []),
+    readFile(BOARD_PATH, "utf8").then(JSON.parse),
   ]);
   const s = score(entries, parseSections(factsRaw));
-  const hist = Array.isArray(history) ? history : [];
-  // Two files, one per theme, selected by <picture> in the template. GitHub
-  // documents that as the only reliable way to respond to the reader's colour
-  // scheme; a single SVG carrying its own prefers-color-scheme media query is
-  // not guaranteed to survive the image proxy.
-  // git does not track empty directories, so a fresh checkout of this repo has no
-  // assets/ until something writes into it. Without this the Action fails on a
-  // clean runner with ENOENT while working fine on any machine that has built before.
-  await mkdir("assets", { recursive: true });
-  await Promise.all([
-    writeFile("assets/hero-dark.svg", renderHero(stats, s, entries, hist, "dark")),
-    writeFile("assets/hero-light.svg", renderHero(stats, s, entries, hist, "light")),
-  ]);
+  // git does not track empty directories, so a fresh checkout has no
+  // assets/board/ until something writes into it.
+  await mkdir("assets/board", { recursive: true });
+  const files = renderBoardFiles(board);
+  await Promise.all(Object.entries(files).map(([name, svg]) => writeFile(`assets/board/${name}`, svg)));
   await writeFile("README.md", await renderReadme(stats));
   return s;
 }

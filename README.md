@@ -1,155 +1,67 @@
 <!--
-  README.md is generated from this file. Edit README.tmpl.md, not README.md.
-  Rebuild with: node scripts/build.mjs   ·   Gate: npm test
+  README.md is generated from this file. Edit README.tmpl.md and data/board.json, not README.md.
+  Rebuild with: node scripts/build.mjs   ·   Gate: npm test   ·   Source check: node scripts/verify-board.mjs
 -->
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="assets/hero-light.svg">
-  <img src="assets/hero-dark.svg" width="880" alt="A terminal running ./verify --all against this profile's projects. 16/18 covered, 88% on its own self-test suite. Verified 2026-11-06.">
-</picture>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/header-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/header-light.svg"><img src="assets/board/header-dark.svg" alt="Hi, I'm TJ. I build data systems that check their own numbers." width="100%"></picture></p>
 
-hi, i'm tj. i work on aerospace and supply-chain data, and i build the AI systems and harnesses that check whether the numbers are telling the truth.
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/lane-supply-chain-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/lane-supply-chain-light.svg"><img src="assets/board/lane-supply-chain-dark.svg" alt="Supply chain projects" width="100%"></picture></p>
 
-language models are good at language and unreliable at arithmetic. so i put the math in code, the judgement in the model, and a test between them. this page works the same way: every claim has its evidence attached, including the ones that fail.
+<p>
+<a href="https://tarang-tj.github.io/aero-supplier-spend/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-aero-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-aero-light.svg"><img src="assets/board/tile-aero-dark.svg" alt="aero-supplier-spend: $600.9B, Aerospace contracts, reconciled to the cent" width="32%"></picture></a>
+<a href="https://tarang-tj.github.io/bullwhip-audit/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-bullwhip-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-bullwhip-light.svg"><img src="assets/board/tile-bullwhip-dark.svg" alt="bullwhip-audit: 87 / 96, Specs where wholesale amplifies demand" width="32%"></picture></a>
+<a href="https://tarang-tj.github.io/starship-flow-control/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-starship-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-starship-light.svg"><img src="assets/board/tile-starship-dark.svg" alt="starship-flow-control: 3 → 4, Ready builds once the gating part clears" width="32%"></picture></a>
+</p>
 
-spent summer 2026 on applied AI at The Coca-Cola Company, Ignite Program, Atlanta. MIS at UW Bothell, class of 2027.
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/lane-finance-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/lane-finance-light.svg"><img src="assets/board/lane-finance-dark.svg" alt="Finance projects" width="100%"></picture></p>
 
-## systems under test
+<p>
+<a href="https://tarang-tj.github.io/p2p-match-audit/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-p2p-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-p2p-light.svg"><img src="assets/board/tile-p2p-dark.svg" alt="p2p-match-audit: 251,734, PO items, three-way matched" width="32%"></picture></a>
+<a href="https://github.com/tarang-tj/quant-liquidity-execution-research"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-quant-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-quant-light.svg"><img src="assets/board/tile-quant-dark.svg" alt="quant-liquidity-execution: 1,200, Market paths per execution test" width="32%"></picture></a>
+<a href="https://github.com/tarang-tj/kalshi-weather-engine-report"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-kalshi-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-kalshi-light.svg"><img src="assets/board/tile-kalshi-dark.svg" alt="kalshi-weather-engine: 0.218 vs 0.084, My Brier vs the market's. Market won." width="32%"></picture></a>
+</p>
 
-| | what it is | evidence |
-| --- | --- | --- |
-| **[aero-supplier-spend](https://tarang-tj.github.io/aero-supplier-spend/)** | who gets paid to build U.S. military and NASA aerospace, on what contract terms, and how much of it is competed. 874,769 real contract transactions, FY2021 to FY2025. | $600.9B reconciled to USAspending's own totals to the cent. rolled up to parent companies, the top five DoD aerospace suppliers hold 82%. a gate re-runs the reconcile and a browser check. |
-| **[p2p-match-audit](https://tarang-tj.github.io/p2p-match-audit/)** | three-way match audit (purchase order, goods receipt, invoice) on a real ERP purchase-to-pay log: 251,734 order items and 1.6M events from the BPI Challenge 2019. | fourteen controls. nine planted bugs each turn the test suite red, and every number in the findings memo traces to a generated summary file. |
-| **[starship-flow-control](https://tarang-tj.github.io/starship-flow-control/)** | constraint model over a multi-level bill of materials. finds what actually gates a build instead of what merely looks late. | deterministic engine, fail-loud on unknown references and cycles. 20 tests. live demo on synthetic data, no build step. |
-| **[tycho](https://tarang-tj.github.io/tycho/)** | browser rover teleoperation simulator on real NASA/USGS elevation data for 7 Moon and Mars sites. Moon levels use the real one-way signal delay; the Mars delay is compressed and labeled. | live demo. a Monte Carlo dry run scores Mars plans before you drive them. |
-| **[ragproof](https://github.com/tarang-tj/ragproof)** | RAG evaluation harness. scores retrieval and generation together, because a perfect retriever still fails if the model ignores the context. | 54 tests, CI green. on BEIR/scifact a dense retriever hit NDCG@10 0.72 against 0.56 for BM25. |
-| **[claude-skill-audit](https://github.com/tarang-tj/claude-skill-audit)** | security scanner for a whole Claude Code and MCP setup: skills, agents, hooks, permissions. | 37 checks across 6 rule modules, zero runtime dependencies, and a cross-artifact escalation-chain detector nothing else covers. |
-| **[the-breaker](https://github.com/tarang-tj/the-breaker)** | hardware kill-switch for an agent fleet. a guarded switch gates every agent behind a token that expires in seconds, so switch off, dead process and dropped network all fail to HALT. | design complete and open sourced. **the hardware is not built yet** — read it as a design, not a running system. |
-| **[SyllabusAI](https://syllabusai.net)** | turns a course syllabus into calendar events in one step, plus a study companion. a free ed-tech tool i built and shipped. Claude API, Node, Supabase, Google Calendar OAuth. | past project, shipped at syllabusai.net. the repo is private. |
-| **[AutoAppli](https://autoappli.com)** | job-search workspace: kanban with pipeline-health widgets and a match scorer that explains each score per dimension. Next.js, FastAPI, Supabase, Claude API. | live. ingestion across 11 ATS sources and 357 live-validated boards. |
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/lane-data-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/lane-data-light.svg"><img src="assets/board/lane-data-dark.svg" alt="Data projects" width="100%"></picture></p>
 
-**outside this account.** 10 pull requests merged into [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops/pulls?q=is%3Apr+author%3Atarang-tj+is%3Amerged), aug to sep 2026, and open ones against [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector/pull/455) and [NVIDIA/cosmos-framework](https://github.com/NVIDIA/cosmos-framework/pull/317). two competition results with no public link, so read them as stated, not shown: 245th of 6,807 in the Kaggle Pokemon TCG AI Battle Challenge, and #14 of 1,983 in HackerRank Orchestrate.
+<p>
+<a href="https://tarang-tj.github.io/economic-pulse-dashboard/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-econ-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-econ-light.svg"><img src="assets/board/tile-econ-dark.svg" alt="economic-pulse-dashboard: 7, FRED indicators, cached and validated" width="32%"></picture></a>
+<a href="https://github.com/tarang-tj/ecommerce-sql"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-ecom-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-ecom-light.svg"><img src="assets/board/tile-ecom-dark.svg" alt="ecommerce-sql: $112,344, GMV across 620 orders, all in SQL" width="32%"></picture></a>
+<a href="https://tarang-tj.github.io/wa-housing-homelessness/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-wa-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-wa-light.svg"><img src="assets/board/tile-wa-dark.svg" alt="wa-housing-homelessness: +60%, WA rent and homelessness, 2015 to 2024" width="32%"></picture></a>
+</p>
+
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/lane-ai-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/lane-ai-light.svg"><img src="assets/board/lane-ai-dark.svg" alt="AI projects" width="100%"></picture></p>
+
+<p>
+<a href="https://tarang-tj.github.io/ragproof/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-ragproof-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-ragproof-light.svg"><img src="assets/board/tile-ragproof-dark.svg" alt="ragproof: 0.720, NDCG@10 on BEIR scifact, dense retriever" width="32%"></picture></a>
+<a href="https://github.com/tarang-tj/claude-skill-audit"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-skill-audit-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-skill-audit-light.svg"><img src="assets/board/tile-skill-audit-dark.svg" alt="claude-skill-audit: 6, Rule modules, one command, zero deps" width="32%"></picture></a>
+<a href="https://github.com/tarang-tj/rescue-relay"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-relay-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-relay-light.svg"><img src="assets/board/tile-relay-dark.svg" alt="rescue-relay: 412 lb, Donated food matched in the demo replay" width="32%"></picture></a>
+</p>
+
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/lane-after-hours-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/lane-after-hours-light.svg"><img src="assets/board/lane-after-hours-dark.svg" alt="After hours projects" width="100%"></picture></p>
+
+<p>
+<a href="https://tarang-tj.github.io/tycho/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-tycho-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-tycho-light.svg"><img src="assets/board/tile-tycho-dark.svg" alt="tycho: Moon → Mars, Drive a rover on real NASA terrain" width="32%"></picture></a>
+<a href="https://tarang-tj.github.io/spectra-vision/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-spectra-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-spectra-light.svg"><img src="assets/board/tile-spectra-dark.svg" alt="spectra-vision: 7, Vision models running on your camera" width="32%"></picture></a>
+<a href="https://tarang-tj.github.io/3d-ramenshop-portfolio/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/board/tile-ramen-dark.svg"><source media="(prefers-color-scheme: light)" srcset="assets/board/tile-ramen-light.svg"><img src="assets/board/tile-ramen-dark.svg" alt="3d-ramenshop-portfolio: No build, Hand-built 3D ramen shop. Sit at the bar." width="32%"></picture></a>
+</p>
 
 <details>
-<summary><code>tj@bothell:~$ ./limitations</code></summary>
+<summary><b>More</b></summary>
 
 <br>
 
-a model card lists what its subject cannot do. so does this one.
+**Everything else.**
+[Coke-Recap](https://tarang-tj.github.io/Coke-Recap/) (3D recap of my Coca-Cola internship) ·
+[AutoAppli](https://autoappli.com) (job-search workspace) ·
+[SyllabusAI](https://syllabusai.net) (syllabus to calendar, past project) ·
+[the-breaker](https://github.com/tarang-tj/the-breaker) (agent kill-switch, design only) ·
+[Cohort-Retention-Engine](https://github.com/tarang-tj/Cohort-Retention-Engine) ·
+[Bottleneck-Simulator](https://github.com/tarang-tj/Bottleneck-Simulator) ·
+[operations-forecasting-model](https://github.com/tarang-tj/operations-forecasting-model) ·
+[team-cartier-dashboard](https://tarang-tj.github.io/team-cartier-dashboard/)
 
-the profile runs a daily self-test: **16/18 covered, 88%**. the questions it currently cannot answer from its own facts file:
+**Outside this account.** 10 pull requests merged into [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops/pulls?q=is%3Apr+author%3Atarang-tj+is%3Amerged), and open ones against [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector/pull/455) and [NVIDIA/cosmos-framework](https://github.com/NVIDIA/cosmos-framework/pull/317).
 
-- Which programming paradigm do you dislike most, and defend that opinion?
-- Who could give a reference for your teamwork?
-
-they stay listed until i write the missing fact. that is the point: a gap you can see is worth more than a gap you cannot.
-
-</details>
-
-<details>
-<summary><code>tj@bothell:~$ ./stump --help</code></summary>
-
-<br>
-
-behind this README is a retrieval harness pointed at [`data/facts.md`](data/facts.md). it ranks the corpus against your question, answers only from what it retrieves, and grades that answer with the same code as [ragproof](https://github.com/tarang-tj/ragproof). no tools, no web access, no guessing.
-
-a question the corpus cannot cover is a failing test. one click files it, question and title already filled in:
-
-[what does claude-skill-audit scan for?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20what%20does%20claude-skill-audit%20scan%20for%3F&question=what%20does%20claude-skill-audit%20scan%20for%3F)
-· [how does the-breaker fail safe?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20how%20does%20the-breaker%20fail%20safe%3F&question=how%20does%20the-breaker%20fail%20safe%3F)
-· [what gates a build in starship-flow-control?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20what%20gates%20a%20build%20in%20starship-flow-control%3F&question=what%20gates%20a%20build%20in%20starship-flow-control%3F)
-· [what is the hardest bug tj has debugged?](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A%20what%20is%20the%20hardest%20bug%20tj%20has%20debugged%3F&question=what%20is%20the%20hardest%20bug%20tj%20has%20debugged%3F)
-
-or [write your own](https://github.com/tarang-tj/tarang-tj/issues/new?template=stump.yml&title=stump%3A+).
-
-**0** trials · **n/a** answered · **0** gaps open.
-
-_nothing open right now. every question anyone has asked is covered by the facts file._
-
-**who found a gap**
-
-_no one has stumped it yet._
+**About.** Applied AI at The Coca-Cola Company, Ignite Program, summer 2026. MIS at UW Bothell, class of 2027. Every number on the tiles above comes from that repo's own README, and a check in this repo fails if one stops matching.
 
 </details>
-
-<details>
-<summary><code>tj@bothell:~$ ls ~/repos</code></summary>
-
-<br>
-
-- [economic-pulse-dashboard](https://github.com/tarang-tj/economic-pulse-dashboard) — 7 FRED indicators, pandas ETL, trend detection, Streamlit
-- [Cohort-Retention-Engine](https://github.com/tarang-tj/Cohort-Retention-Engine) — event CSV in, retention matrix and churn curves out
-- [Bottleneck-Simulator](https://github.com/tarang-tj/Bottleneck-Simulator) — discrete-event simulation of multi-stage workflows with SimPy
-- [ecommerce-sql](https://github.com/tarang-tj/ecommerce-sql) — CLV, market basket and rolling revenue windows on a normalized PostgreSQL schema
-- [Coke-Recap](https://tarang-tj.github.io/Coke-Recap/) — interactive 3D recap of the Coca-Cola internship, React Three Fiber
-- [operations-forecasting-model](https://github.com/tarang-tj/operations-forecasting-model) — multivariate regression and a 15+ metric KPI dashboard
-- [wa-housing-homelessness](https://github.com/tarang-tj/wa-housing-homelessness) — R analysis of rent and homelessness in Washington State
-- [3d-ramenshop-portfolio](https://tarang-tj.github.io/3d-ramenshop-portfolio/) — hand-coded Three.js ramen shop, single file, no build step
-
-</details>
-
-<details>
-<summary><code>tj@bothell:~$ man profile</code></summary>
-
-<br>
-
-two GitHub Actions, no server, no third-party services, zero runtime dependencies.
-
-the panel at the top is an SVG this repo draws itself. it is **static on purpose**: an SVG that GitHub
-embeds as an image runs in secure static mode, where declarative animation is disabled, so neither CSS
-keyframes nor SMIL will ever run there. i checked that against a browser rather than trusting a blog
-post — a plain HTML div running the same keyframes animated fine while the identical animation inside
-an image sat on frame one. so the craft is all rendering: gradients, a gaussian-blur phosphor glow,
-turbulence grain, a scanline pattern and a vignette. two themes, because a dark terminal pasted onto a
-white page looks broken.
-
-```mermaid
-flowchart LR
-  A[you open an issue] --> B[run trial]
-  B --> C[rank sections of<br/>data/facts.md]
-  C -->|found something| D[answer, and cite it]
-  C -->|found nothing| E[break: you scored]
-  D --> F[log the trial]
-  E --> F
-  F --> G[redraw the panel<br/>commit to README]
-```
-
-a trial counts as a break when retrieval finds **nothing** in the corpus. that is deterministic rather
-than a judgement about how the model phrased itself, so the score cannot be gamed by wording, and the
-model cannot quietly rescue a question the facts do not cover.
-
-when a model writes the answer, the answer is scored too. `faithfulness` is the same algorithm and the
-same 0.55 threshold as [ragproof](https://github.com/tarang-tj/ragproof), run with the hash embedder
-from that repo's own test suite so the workflow needs no model download. that embedder only counts word
-overlap, so the number is a lexical-overlap proxy, not an entailment check: it is paraphrase-blind and
-negation-blind, and an answer that borrows corpus wording while saying something false would still score
-well. read it as a smoke alarm, not a verdict. extractive answers are not scored at all, since they are
-copied corpus text and would sit at 1.0 by construction. so far: **0** model-written answers
-scored, mean grounding proxy **n/a**.
-
-- `scripts/render-hero.mjs` — draws the terminal in both themes
-- `scripts/lib/retrieve.mjs` — ranks facts against a question, and doubles as the answer path when no
-  model key is set, so the bot degrades to retrieval rather than to silence
-- `scripts/lib/ragproof-metrics.mjs` — faithfulness and relevance, ported from ragproof so the profile
-  grades itself with the code it ships elsewhere
-- `scripts/lib/eval-log.mjs` — replays every past break against the current corpus, so a gap counts as
-  closed only once the facts genuinely cover it
-- `scripts/build.test.mjs` — the gate. an unsubstituted token, a lost theme, glow leaking into the
-  printout, or a row dropped from the panel while the summary still counts it all fail here
-
-the model never gets tools, never sees anything outside `data/facts.md`, and every question is treated
-as untrusted input and stripped of markup before it is written anywhere. worst case it says "i don't
-know", which here is a scoring event rather than a failure.
-
-anything a stranger writes ends up on a page with my name on it, so moderation stays human: a junk trial
-comes off the board by deleting its entry from `data/eval.json` and closing the issue. the score is
-honest, not automatic.
-
-</details>
-
----
-
-[portfolio](https://tarang-tj.github.io) · [linkedin](https://www.linkedin.com/in/tarang-tj/) · 36 public repos · 10 stars · Python · JavaScript · TypeScript · C++
-
-open to aerospace roles in program, data, supply chain and applied AI, starting June 2027.

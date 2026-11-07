@@ -1,25 +1,23 @@
 // The build gate. Run: npm test
 //
-// This repo had no test of any kind, so an unsubstituted template token or a
-// theme that quietly stopped rendering would have shipped to the profile and
-// been found by a visitor. These are the cheapest assertions that would have
-// caught the things that actually went wrong while building it.
-//
-// Pure: renders to strings and asserts on them. Nothing writes a file, so
-// running the suite cannot leave the working tree dirty.
+// Pure: renders to strings and asserts on them. Nothing writes a file, so running
+// the suite cannot leave the working tree dirty. The network half of the gate
+// (every tile number matches its source README, every link answers 200) lives in
+// scripts/verify-board.mjs, because a unit test should not depend on GitHub.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { renderReadme } from "./build.mjs";
-import { renderHero } from "./render-hero.mjs";
+import { renderBoardFiles, renderBoardMarkdown, renderTile } from "./render-board.mjs";
+import { ICONS } from "./board/icons.mjs";
+import { ART } from "./board/art.mjs";
 
 const stats = JSON.parse(await readFile("data/stats.json", "utf8"));
-const history = JSON.parse(await readFile("data/history.json", "utf8"));
-const entries = JSON.parse(await readFile("data/eval.json", "utf8"));
-const score = { trials: 0, held: 0, breaks: 0, open: 0, closed: 0 };
-const THEMES = ["dark", "light"];
-const render = (t, s = score, h = history) => renderHero(stats, s, entries, h, t);
+const board = JSON.parse(await readFile("data/board.json", "utf8"));
+const files = renderBoardFiles(board);
+const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+const tiles = board.lanes.flatMap((l) => l.tiles.map((t) => ({ ...t, accent: l.accent })));
 
 test("every template token is substituted", async () => {
   const out = await renderReadme(stats);
@@ -27,83 +25,93 @@ test("every template token is substituted", async () => {
   assert.equal(left, null, `unsubstituted token(s): ${left ? [...new Set(left)].join(", ") : ""}`);
 });
 
-test("the README keeps its load-bearing sections", async () => {
+test("the false claim that README images cannot animate is gone", async () => {
   const out = await renderReadme(stats);
-  // One per explorable command plus the one section that must never be collapsed.
-  for (const needle of ["systems under test", "./limitations", "./stump", "ls ~/repos", "man profile"]) {
-    assert.ok(out.includes(needle), `README lost "${needle}"`);
+  assert.ok(!/secure static mode/i.test(out));
+  assert.ok(!/\*\*0\*\* trials/.test(out), "the dead trial counter is back on the page");
+});
+
+test("one header, one banner per lane, one tile per project, in both themes", () => {
+  const want = 2 * (1 + board.lanes.length + tiles.length);
+  assert.equal(Object.keys(files).length, want);
+  for (const t of ["dark", "light"]) {
+    assert.ok(files[`header-${t}.svg`]);
+    for (const l of board.lanes) assert.ok(files[`lane-${l.id}-${t}.svg`], `missing banner ${l.id} ${t}`);
+    for (const x of tiles) assert.ok(files[`tile-${x.id}-${t}.svg`], `missing tile ${x.id} ${t}`);
   }
 });
 
-test("the README points at both themes and not the retired single hero", async () => {
+test("every lane names real art and every tile a real icon", () => {
+  for (const l of board.lanes) assert.ok(ART[l.art], `lane ${l.id}: no art "${l.art}"`);
+  for (const t of tiles) assert.ok(ICONS[t.icon], `tile ${t.id}: no icon "${t.icon}"`);
+});
+
+test("each tile shows exactly its own number and links where board.json says", () => {
+  const md = renderBoardMarkdown(board);
+  for (const t of tiles) {
+    const svg = files[`tile-${t.id}-dark.svg`];
+    assert.ok(svg.includes(`>${t.big.replace(/&/g, "&amp;")}<`), `tile ${t.id} does not render "${t.big}"`);
+    assert.ok(md.includes(`<a href="${t.link}">`), `tile ${t.id} link missing from the README`);
+  }
+});
+
+test("the big number is backed by its own source tokens", () => {
+  // Offline half of the source rule: a tile cannot claim a number its cited
+  // quotes do not contain. verify-board.mjs then checks the quotes against GitHub.
+  for (const t of tiles) {
+    const q = t.source.quotes.join(" ").toLowerCase();
+    for (const k of t.source.tokens) assert.ok(q.includes(k.toLowerCase()), `${t.id}: token "${k}" not in its quotes`);
+    const digits = t.big.match(/[\d.,]+/g) ?? [];
+    for (const d of digits.filter((x) => /\d/.test(x))) {
+      // A digit may also be cited spelled out ("Six rule modules", "seven real
+      // vision models"), but only as the word for that exact number.
+      const word = WORDS[Number(d)];
+      const ok = q.includes(d.toLowerCase()) || (word !== undefined && new RegExp(`\\b${word}\\b`).test(q));
+      assert.ok(ok, `${t.id}: "${d}" from "${t.big}" is not in its quotes`);
+    }
+  }
+});
+
+test("both themes render and differ", () => {
+  for (const name of Object.keys(files).filter((n) => n.endsWith("-dark.svg"))) {
+    const light = files[name.replace("-dark", "-light")];
+    assert.notEqual(files[name], light, `${name}: light theme is identical to dark`);
+  }
+});
+
+test("motion is decoration: nothing starts invisible", () => {
+  // A keyframe that starts at opacity 0 strands the shape on any viewer that
+  // paints frame one and stops. The blink at 50% is fine; a 0%/from at 0 is not.
+  for (const [name, svg] of Object.entries(files)) {
+    assert.ok(!/(?:from|(?<![\d.])0%)\s*\{[^}]*opacity:\s*0[;}]/.test(svg), `${name}: an animation starts at opacity 0`);
+    assert.ok(!/animation-fill-mode:\s*backwards/.test(svg), `${name}: fill-mode backwards strands the first frame`);
+  }
+});
+
+test("the SVGs actually animate", () => {
+  assert.ok(/@keyframes/.test(files["header-dark.svg"]));
+  for (const l of board.lanes) assert.ok(/@keyframes/.test(files[`lane-${l.id}-dark.svg`]), `banner ${l.id} is static`);
+});
+
+test("nothing inside an SVG reaches outside it", () => {
+  // GitHub's image proxy serves SVGs with default-src 'none': external images,
+  // fonts and scripts inside the file would silently fail.
+  for (const [name, svg] of Object.entries(files)) {
+    assert.ok(!/<script|href="http|@import|url\(http/i.test(svg), `${name}: references something outside the file`);
+    assert.ok(svg.length < 60_000, `${name}: ${svg.length} bytes`);
+  }
+});
+
+test("text from board.json is escaped", () => {
+  const evil = { id: "x", big: "<b>&", label: "a<script>", name: "n\"", icon: "spark", link: "#" };
+  const svg = renderTile(evil, "blue", "dark");
+  assert.ok(!/<b>|<script>/.test(svg), "raw markup leaked into the SVG");
+  assert.ok(svg.includes("&lt;b&gt;&amp;"));
+});
+
+test("the page stays short above the fold", async () => {
   const out = await renderReadme(stats);
-  assert.ok(out.includes("assets/hero-dark.svg"), "dark hero not referenced");
-  assert.ok(out.includes("assets/hero-light.svg"), "light hero not referenced");
-  assert.ok(!/assets\/hero\.svg/.test(out), "still references the retired assets/hero.svg");
-});
-
-test("both themes render, and they are genuinely different", () => {
-  const [dark, light] = THEMES.map((t) => render(t));
-  for (const [name, svg] of [["dark", dark], ["light", light]]) {
-    assert.ok(svg.startsWith("<svg"), `${name}: not an svg`);
-    assert.ok(svg.trimEnd().endsWith("</svg>"), `${name}: unterminated`);
-    assert.ok(/aria-label="[^"]+"/.test(svg), `${name}: missing aria-label`);
-  }
-  assert.notEqual(dark, light, "the theme argument does nothing");
-  assert.ok(dark.includes("#050A07"), "dark lost its phosphor background");
-  assert.ok(light.includes("#FAF8F1"), "light lost its paper background");
-});
-
-// The light theme exists because a dark terminal pasted onto a white page looks
-// broken. If glow ever leaks into it, it stops reading as ink on paper.
-test("the light theme is a printout, not a dimmed CRT", () => {
-  const light = render("light");
-  assert.ok(!/filter="url\(#ph\)"/.test(light), "phosphor glow leaked into the light theme");
-  assert.ok(!/filter="url\(#soft\)"/.test(light), "soft glow leaked into the light theme");
-  assert.ok(render("dark").includes('filter="url(#ph)"'), "the dark theme lost its glow");
-});
-
-// Animation is not available: an SVG embedded as an image runs in secure static
-// mode, where declarative animation is disabled. Verified against a browser, and
-// it matches the SVG Integration spec. So an animation here would not degrade,
-// it would simply never run, and anything depending on one would vanish.
-test("nothing here relies on animation, because animation cannot run", () => {
-  for (const t of THEMES) {
-    const svg = render(t);
-    assert.ok(!/<animate|@keyframes|animation:/.test(svg), `${t}: contains an animation that will never run`);
-  }
-});
-
-test("an unmeasured metric never renders as a fake zero", () => {
-  const svg = renderHero(stats, { trials: 0, open: 0 }, [], [], "dark");
-  assert.ok(svg.includes("no stranger has tried"), "zero trials did not render as words");
-  assert.ok(svg.includes("self-test has not run yet"), "absent history did not render as words");
-  assert.ok(!/0% self-test coverage/.test(svg), "absent coverage rendered as a fake 0%");
-});
-
-// Guards one failure: a row stops rendering while the summary keeps counting it,
-// so the panel claims more than it shows. It deliberately does NOT catch a wrong
-// number in SYSTEMS, because the summary is summed from that same array and the
-// two move together by construction. Both faults were injected to confirm which
-// one this actually catches.
-test("the summary total matches the rows actually rendered", () => {
-  const svg = render("dark");
-  const headline = Number(svg.match(/·\s*(\d+)\s*passing/)?.[1]);
-  const rows = [...svg.matchAll(/text-anchor="end">(\d+)<\/text>/g)].reduce((n, m) => n + Number(m[1]), 0);
-  assert.ok(Number.isFinite(headline), "no summary total found");
-  assert.equal(headline, rows, "the summary total disagrees with the rows it summarises");
-});
-
-// Inside SVG a style or text node is XML, not HTML. A stray angle bracket from
-// unescaped data is read as markup and breaks the document, and the browser then
-// shows a broken-image icon with no error anywhere. Caught exactly that way.
-test("no unescaped markup can break XML parsing", () => {
-  const hostile = { ...stats, languages: [{ name: '</text><script>x</script>' }], publicRepos: '"><b>' };
-  for (const t of THEMES) {
-    const svg = renderHero(hostile, score, entries, history, t);
-    assert.ok(!svg.includes("<script>"), `${t}: unescaped markup reached the SVG`);
-    const opens = [...svg.matchAll(/<([a-zA-Z]+)(?:\s[^>]*?)?(\/?)>/g)].filter((m) => !m[2]).length;
-    const closes = [...svg.matchAll(/<\/([a-zA-Z]+)>/g)].length;
-    assert.equal(opens, closes, `${t}: ${opens} opening tags against ${closes} closing tags`);
-  }
+  const visible = out.split("<details>")[0].replace(/<!--[\s\S]*?-->/g, "").replace(/<[^>]+>/g, " ");
+  const words = visible.split(/\s+/).filter(Boolean).length;
+  assert.ok(words <= 40, `${words} words before the fold`);
 });

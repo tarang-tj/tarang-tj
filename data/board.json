@@ -1,0 +1,123 @@
+{
+  "header": {
+    "title": "Hi, I'm TJ",
+    "tagline": "I build data systems that check their own numbers"
+  },
+  "lanes": [
+    {
+      "id": "supply-chain", "name": "Supply chain", "accent": "amber", "art": "conveyor",
+      "tiles": [
+        {
+          "id": "aero", "big": "$600.9B", "label": "Aerospace contracts, reconciled to the cent",
+          "name": "aero-supplier-spend", "link": "https://tarang-tj.github.io/aero-supplier-spend/", "icon": "plane",
+          "source": { "repo": "tarang-tj/aero-supplier-spend", "file": "README.md",
+            "quotes": ["$600.9B, reconciled to USAspending's own totals to the cent"], "tokens": ["$600.9B", "to the cent"] }
+        },
+        {
+          "id": "bullwhip", "big": "87 / 96", "label": "Specs where wholesale amplifies demand",
+          "name": "bullwhip-audit", "link": "https://tarang-tj.github.io/bullwhip-audit/", "icon": "wave",
+          "source": { "repo": "tarang-tj/bullwhip-audit", "file": "README.md",
+            "quotes": ["Most wholesale industries amplify in 87 of 96 measurement specifications"], "tokens": ["87 of 96", "wholesale", "amplify"] }
+        },
+        {
+          "id": "starship", "big": "3 → 4", "label": "Ready builds once the gating part clears",
+          "name": "starship-flow-control", "link": "https://tarang-tj.github.io/starship-flow-control/", "icon": "grid",
+          "source": { "repo": "tarang-tj/starship-flow-control", "file": "README.md",
+            "quotes": ["`#readyBuilds` reaches 3 with no click", "Clicking the recover preset yields 4 ready builds"], "tokens": ["reaches 3", "4 ready builds"] }
+        }
+      ]
+    },
+    {
+      "id": "finance", "name": "Finance", "accent": "green", "art": "candles",
+      "tiles": [
+        {
+          "id": "p2p", "big": "251,734", "label": "PO items, three-way matched",
+          "name": "p2p-match-audit", "link": "https://tarang-tj.github.io/p2p-match-audit/", "icon": "lights",
+          "source": { "repo": "tarang-tj/p2p-match-audit", "file": "README.md",
+            "quotes": ["251,734 purchase-order items"], "tokens": ["251,734", "purchase-order items"] }
+        },
+        {
+          "id": "quant", "big": "1,200", "label": "Market paths per execution test",
+          "name": "quant-liquidity-execution", "link": "https://github.com/tarang-tj/quant-liquidity-execution-research", "icon": "fan",
+          "source": { "repo": "tarang-tj/quant-liquidity-execution-research", "file": "README.md",
+            "quotes": ["1,200 shared market paths"], "tokens": ["1,200", "market paths"] }
+        },
+        {
+          "id": "kalshi", "big": "0.218 vs 0.084", "bigSize": 23, "label": "My Brier vs the market's. Market won.",
+          "name": "kalshi-weather-engine", "link": "https://github.com/tarang-tj/kalshi-weather-engine-report", "icon": "thermo",
+          "source": { "repo": "tarang-tj/kalshi-weather-engine-report", "file": "README.md",
+            "quotes": ["Brier score on the same markets: **model 0.218, market 0.084**. The market was far better calibrated."], "tokens": ["0.218", "0.084", "Brier"] }
+        }
+      ]
+    },
+    {
+      "id": "data", "name": "Data", "accent": "blue", "art": "bars",
+      "tiles": [
+        {
+          "id": "econ", "big": "7", "label": "FRED indicators, cached and validated",
+          "name": "economic-pulse-dashboard", "link": "https://tarang-tj.github.io/economic-pulse-dashboard/", "icon": "spark",
+          "source": { "repo": "tarang-tj/economic-pulse-dashboard", "file": "README.md",
+            "quotes": ["Pulls 7 macroeconomic time series from the FRED REST API with local 12-hour caching", "caching, validation"], "tokens": ["7", "FRED", "caching", "validation"] }
+        },
+        {
+          "id": "ecom", "big": "$112,344", "label": "GMV across 620 orders, all in SQL",
+          "name": "ecommerce-sql", "link": "https://github.com/tarang-tj/ecommerce-sql", "icon": "coins",
+          "source": { "repo": "tarang-tj/ecommerce-sql", "file": "README.md",
+            "quotes": ["$112,344 across 620 orders"], "tokens": ["$112,344", "620 orders"] }
+        },
+        {
+          "id": "wa", "big": "+60%", "label": "WA rent and homelessness, 2015 to 2024",
+          "name": "wa-housing-homelessness", "link": "https://tarang-tj.github.io/wa-housing-homelessness/", "icon": "house",
+          "source": { "repo": "tarang-tj/wa-housing-homelessness", "file": "README.md",
+            "quotes": ["both rent and homelessness rose roughly 60% between 2015 and 2024"], "tokens": ["60%", "2015", "2024"] }
+        }
+      ]
+    },
+    {
+      "id": "ai", "name": "AI", "accent": "purple", "art": "scan",
+      "tiles": [
+        {
+          "id": "ragproof", "big": "0.720", "label": "NDCG@10 on BEIR scifact, dense retriever",
+          "name": "ragproof", "link": "https://tarang-tj.github.io/ragproof/", "icon": "magnifier",
+          "source": { "repo": "tarang-tj/ragproof", "file": "README.md",
+            "quotes": ["A real embedder lifts dense NDCG@10 from 0.506 (model2vec) to **0.720**", "### BEIR/scifact"], "tokens": ["0.720", "NDCG@10", "scifact"] }
+        },
+        {
+          "id": "skill-audit", "big": "6", "label": "Rule modules, one command, zero deps",
+          "name": "claude-skill-audit", "link": "https://github.com/tarang-tj/claude-skill-audit", "icon": "shield",
+          "source": { "repo": "tarang-tj/claude-skill-audit", "file": "README.md",
+            "quotes": ["Six rule modules cover the whole `.claude/` surface", "Security-audit your entire Claude Code setup in one command."], "tokens": ["Six rule modules", "one command"] }
+        },
+        {
+          "id": "relay", "big": "412 lb", "label": "Donated food matched in the demo replay",
+          "name": "rescue-relay", "link": "https://github.com/tarang-tj/rescue-relay", "icon": "crate",
+          "source": { "repo": "tarang-tj/rescue-relay", "file": "README.md",
+            "quotes": ["contains four local donor offers totaling 412 lb"], "tokens": ["412 lb", "donor offers"] }
+        }
+      ]
+    },
+    {
+      "id": "after-hours", "name": "After hours", "accent": "pink", "art": "moonscape",
+      "tiles": [
+        {
+          "id": "tycho", "big": "Moon → Mars", "bigSize": 24, "label": "Drive a rover on real NASA terrain",
+          "name": "tycho", "link": "https://tarang-tj.github.io/tycho/", "icon": "moon",
+          "source": { "repo": "tarang-tj/tycho", "file": "README.md",
+            "quotes": ["real NASA and USGS elevation data from the Moon and Mars"], "tokens": ["Moon", "Mars", "NASA"] }
+        },
+        {
+          "id": "spectra", "big": "7", "label": "Vision models running on your camera",
+          "name": "spectra-vision", "link": "https://tarang-tj.github.io/spectra-vision/", "icon": "dots",
+          "source": { "repo": "tarang-tj/spectra-vision", "file": "README.md",
+            "quotes": ["Eight modes run seven real vision models on your camera"], "tokens": ["seven", "vision models", "camera"] }
+        },
+        {
+          "id": "ramen", "big": "No build", "label": "Hand-built 3D ramen shop. Sit at the bar.",
+          "name": "3d-ramenshop-portfolio", "link": "https://tarang-tj.github.io/3d-ramenshop-portfolio/", "icon": "bowl",
+          "source": { "repo": "tarang-tj/3d-ramenshop-portfolio", "file": "README.md",
+            "quotes": ["No build step", "Step into a hand-built 3D ramen shop. Sit at the bar."], "tokens": ["No build", "hand-built", "Sit at the bar"] }
+        }
+      ]
+    }
+  ]
+}
