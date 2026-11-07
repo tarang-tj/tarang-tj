@@ -109,7 +109,7 @@ test("text from board.json is escaped", () => {
   assert.ok(svg.includes("&lt;b&gt;&amp;"));
 });
 
-test("the page stays short above the fold", async () => {
+test("markdown text above the fold stays short (the art carries the rest)", async () => {
   const out = await renderReadme(stats);
   const visible = out.split("<details>")[0].replace(/<!--[\s\S]*?-->/g, "").replace(/<[^>]+>/g, " ");
   const words = visible.split(/\s+/).filter(Boolean).length;
