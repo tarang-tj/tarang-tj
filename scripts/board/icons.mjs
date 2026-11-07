@@ -6,11 +6,15 @@ const range = (n) => Array.from({ length: n }, (_, i) => i);
 
 export const ICONS = {
   plane: (p, a) => ({
-    body: `<path d="M0 22 L28 22" stroke="${p.line}" stroke-dasharray="3 3"/><g class="pl"><path transform="translate(30 0) scale(-1 1)" d="M0 22 l10-3 4-10 3 0-2 10 9-2 3-4 2 0-1 6 1 6-2 0-3-4-9-2 2 10-3 0-4-10z" fill="${a}"/></g>`,
-    css: ".pl{animation:fly 3s ease-in-out infinite} @keyframes fly{0%,100%{transform:translate(-6px,4px)}50%{transform:translate(6px,-4px)}}",
+    // Side-view airliner pointing right: fuselage, swept wing, tail fin.
+    body: `<path d="M0 34 H14" stroke="${p.line}" stroke-width="2" stroke-dasharray="3 3"/><g class="pl">` +
+      `<path d="M6 19 H34 C40 19 43 21 43 22 C43 23 40 25 34 25 H6 Z" fill="${a}"/>` +
+      `<path d="M20 22 L13 36 H18 L29 23 Z" fill="${a}"/><path d="M20 21 L15 13 H19 L26 20 Z" fill="${a}" opacity=".7"/>` +
+      `<path d="M6 20 L2 10 H7 L12 20 Z" fill="${a}"/></g>`,
+    css: ".pl{animation:fly 3s ease-in-out infinite} @keyframes fly{0%,100%{transform:translate(-2px,3px)}50%{transform:translate(2px,-3px)}}",
   }),
   wave: (p, a) => ({
-    body: `<path class="wv" d="M0 20 q4 -3 8 0 t8 0 q5 -8 10 0 t10 0 q6 -14 12 0 t12 0" fill="none" stroke="${a}" stroke-width="2"/>`,
+    body: `<g transform="scale(.72 1)"><path class="wv" d="M0 20 q4 -3 8 0 t8 0 q5 -8 10 0 t10 0 q6 -14 12 0 t12 0" fill="none" stroke="${a}" stroke-width="2"/></g>`,
     css: ".wv{transform-origin:0 20px;animation:amp 2s ease-in-out infinite} @keyframes amp{0%,100%{transform:scaleY(.6)}50%{transform:scaleY(1.4)}}",
   }),
   grid: (p) => ({
