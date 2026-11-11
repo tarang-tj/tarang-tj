@@ -22,7 +22,7 @@ between them.
 
 Who gets paid to build U.S. military and NASA aerospace, on what contract terms, and
 how much of it is competed. 874,769 real contract transactions from USAspending,
-FY2021 to FY2025, $600.9B, reconciled to USAspending's own totals to the cent.
+FY2021 to FY2025, $600.9B, reconciled to USAspending's own totals to the cent as of the Oct 26, 2026 pull.
 Rolled up to parent companies, Lockheed Martin holds 43% of DoD aerospace obligations
 and the top five hold 82%. 87% of DoD aerospace dollars are not competed.
 Live at tarang-tj.github.io/aero-supplier-spend. Repo: github.com/tarang-tj/aero-supplier-spend
